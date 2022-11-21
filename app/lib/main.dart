@@ -1,3 +1,4 @@
+import 'package:app/schedule.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,22 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const FirstPage(title: 'yooo'),
+      home: const LessonsPage(),
     );
-  }
-}
-
-class FirstPage extends StatelessWidget {
-  const FirstPage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(title),
-        ),
-        body: const Text("hi"));
   }
 }

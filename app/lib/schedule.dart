@@ -50,27 +50,50 @@ class Lesson {
   }
 }
 
-class Lessons extends State {
+class LessonsPage extends StatefulWidget {
+  const LessonsPage({super.key});
+
+  @override
+  State<LessonsPage> createState() => Lessons();
+}
+
+class Lessons extends State<LessonsPage> {
+  late Future<List<Lesson>> futureLessons;
+
   @override
   void initState() {
     super.initState();
+    futureLessons = fetchLessons();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Text("hi");
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text("hi"),
+        ),
+        body: const Text("hi"));
   }
 }
 
-Future<Lesson> fetchLessons() async {
+Future<List<Lesson>> fetchLessons() async {
   final response =
-      await http.get(Uri.parse('http://localhost:3000/api/schedule/lessons'));
+      await http.get(Uri.https('gtg.seabird.digital', "/api/schedule/lessons", {
+    "selectionGuid": "MTJhNTBiNjktNjhhZS1mMTNhLWEzYjEtNGM2NGZhZmE1ZDhi",
+    "week": "42"
+  }));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    return Lesson.fromJson(jsonDecode(response.body));
+    List<Lesson> lessons = [];
+    for (var i = 0; i < jsonDecode(response.body).length; i++) {
+      lessons.add(Lesson.fromJson(jsonDecode(response.body)));
+    }
+
+    return lessons;
   } else {
+    var thing = response.body;
     // If the server did not return a 200 OK response,
     // then throw an exception.
     throw Exception('Failed to load Lesson');
