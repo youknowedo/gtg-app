@@ -20,11 +20,11 @@ class Class {
 }
 
 class ClassesDropdown extends StatefulWidget {
-  final Function(String id) updateSelectedClass;
+  final Function(String id)? updateSelectedClass;
 
   const ClassesDropdown({
     super.key,
-    required this.updateSelectedClass,
+    this.updateSelectedClass,
   });
 
   static of(BuildContext context, {bool root = false}) => root
@@ -58,7 +58,7 @@ class Classes extends State<ClassesDropdown> {
                 child: Text(e.name),
               );
             }).toList(),
-            onChanged: (s) => widget.updateSelectedClass(s),
+            onChanged: (s) => widget.updateSelectedClass!(s),
           );
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');

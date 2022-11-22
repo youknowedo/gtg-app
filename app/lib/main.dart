@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app/schedule.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:http/http.dart' as http;
 
 import 'classes.dart';
@@ -50,57 +51,67 @@ class NavigationState extends State<Navigation> {
     setState(() {
       lessons = fetchLessons();
     });
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (lessons == null) {
+        setState(() {
+          lessons = fetchLessons();
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: ClassesDropdown(
-        updateSelectedClass: updateSelectedClass,
-      )),
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
-            icon: Icon(Icons.explore),
-            label: 'Explore',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.commute),
-            label: 'Commute',
-          ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.calendar_view_day),
-            icon: Icon(Icons.calendar_view_day_outlined),
-            label: 'Schema',
-          ),
-        ],
-      ),
-      body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        child: <Widget>[
-          Container(
-            color: Colors.red,
-            alignment: Alignment.center,
-            child: const Text('Page 1'),
-          ),
-          Container(
-            color: Colors.green,
-            alignment: Alignment.center,
-            child: const Text('Page 2'),
-          ),
-          Schedule(
-            futureLessons: lessons,
-          )
-        ][currentPageIndex],
-      ),
-    );
+    return lessons == null
+        ? const CircularProgressIndicator()
+        : Scaffold(
+            appBar: AppBar(
+                title: ClassesDropdown(
+              updateSelectedClass: updateSelectedClass,
+            )),
+            bottomNavigationBar: NavigationBar(
+              onDestinationSelected: (int index) {
+                setState(() {
+                  currentPageIndex = index;
+                });
+              },
+              selectedIndex: currentPageIndex,
+              destinations: const <Widget>[
+                NavigationDestination(
+                  icon: Icon(Icons.explore),
+                  label: 'Explore',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.commute),
+                  label: 'Commute',
+                ),
+                NavigationDestination(
+                  selectedIcon: Icon(Icons.calendar_view_day),
+                  icon: Icon(Icons.calendar_view_day_outlined),
+                  label: 'Schema',
+                ),
+              ],
+            ),
+            body: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              child: <Widget>[
+                Container(
+                  color: Colors.red,
+                  alignment: Alignment.center,
+                  child: const Text('Page 1'),
+                ),
+                Container(
+                  color: Colors.green,
+                  alignment: Alignment.center,
+                  child: const Text('Page 2'),
+                ),
+                Schedule(
+                  futureLessons: lessons,
+                )
+              ][currentPageIndex],
+            ),
+          );
   }
 
   updateSelectedClass(String id) {
@@ -108,8 +119,6 @@ class NavigationState extends State<Navigation> {
       lessons = null;
       selectedClass = id;
     });
-
-    refreshLessons();
   }
 
   refreshLessons() {
