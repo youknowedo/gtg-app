@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:app/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class LColors {
   final String background;
@@ -51,21 +48,11 @@ class Lesson {
   }
 }
 
-class Schedule extends StatefulWidget {
-  const Schedule({super.key});
+class Schedule extends StatelessWidget {
+  late Future<List<Lesson>>? futureLessons;
+  late Function() refresh;
 
-  @override
-  State<Schedule> createState() => Lessons();
-}
-
-class Lessons extends State<Schedule> {
-  late Future<List<Lesson>> futureLessons;
-
-  @override
-  void initState() {
-    super.initState();
-    futureLessons = fetchLessons();
-  }
+  Schedule({super.key, this.futureLessons, required this.refresh});
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +61,7 @@ class Lessons extends State<Schedule> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return RefreshIndicator(
-            onRefresh: _pullRefresh,
+            onRefresh: () => refresh(),
             child: SingleChildScrollView(
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 20),
@@ -171,39 +158,5 @@ class Lessons extends State<Schedule> {
         return const Center(child: CircularProgressIndicator());
       },
     );
-  }
-
-  Future<void> _pullRefresh() async {
-    Future<List<Lesson>> freshLessons = fetchLessons();
-    setState(() {
-      futureLessons = Future.value(freshLessons);
-    });
-  }
-}
-
-class DateFormat {}
-
-Future<List<Lesson>> fetchLessons() async {
-  final response =
-      await http.get(Uri.https('gtg.seabird.digital', "/api/schedule/lessons", {
-    "selectionGuid": "MTJhNTBiNjktNjhhZS1mMTNhLWEzYjEtNGM2NGZhZmE1ZDhi",
-    "week": "42",
-    "day": "1",
-    "parsed": "true"
-  }));
-
-  if (response.statusCode == 200) {
-    var data = jsonDecode(response.body)["data"];
-
-    List<Lesson> lessons = [];
-    for (var i = 0; i < data.length; i++) {
-      lessons.add(Lesson.fromJson(data[i]));
-    }
-
-    return lessons;
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load Lesson');
   }
 }

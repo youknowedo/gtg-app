@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:app/schedule.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import 'classes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,22 +29,36 @@ class MyApp extends StatelessWidget {
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
 
+  static NavigationState? of(BuildContext context, {bool root = false}) => root
+      ? context.findRootAncestorStateOfType<NavigationState>()
+      : context.findAncestorStateOfType<NavigationState>();
+
   @override
-  State<Navigation> createState() => _NavigationState();
+  State<Navigation> createState() => NavigationState();
 }
 
-class _NavigationState extends State<Navigation> {
+class NavigationState extends State<Navigation> {
   int currentPageIndex = 2;
+
+  String selectedClass = "MTJhNTBiNjktNjhhZS1mMTNhLWEzYjEtNGM2NGZhZmE1ZDhi";
+  late Future<List<Lesson>>? lessons;
+
+  @override
+  void initState() {
+    super.initState();
+
+    setState(() {
+      lessons = fetchLessons();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: DropdownButton(items: const [
-        DropdownMenuItem(
-          child: Text("T1C"),
-        )
-      ], onChanged: (e) => {})),
+          title: ClassesDropdown(
+        updateSelectedClass: updateSelectedClass,
+      )),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
@@ -76,9 +95,52 @@ class _NavigationState extends State<Navigation> {
             alignment: Alignment.center,
             child: const Text('Page 2'),
           ),
-          const Schedule()
+          Schedule(
+            futureLessons: lessons,
+            refresh: refreshLessons,
+          )
         ][currentPageIndex],
       ),
     );
+  }
+
+  updateSelectedClass(String id) {
+    setState(() {
+      lessons = null;
+      selectedClass = id;
+    });
+
+    refreshLessons();
+  }
+
+  refreshLessons() {
+    setState(() {
+      lessons = fetchLessons();
+    });
+  }
+
+  Future<List<Lesson>> fetchLessons() async {
+    final response = await http.get(Uri.https(
+        'gtg.seabird.digital', "/api/schedule/lessons", {
+      "selectionGuid": selectedClass,
+      "week": "42",
+      "day": "1",
+      "parsed": "true"
+    }));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body)["data"];
+
+      List<Lesson> lessons = [];
+      for (var i = 0; i < data.length; i++) {
+        lessons.add(Lesson.fromJson(data[i]));
+      }
+
+      return lessons;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load Lesson');
+    }
   }
 }
