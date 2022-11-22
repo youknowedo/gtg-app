@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'main.dart';
 
@@ -41,7 +42,29 @@ class Classes extends State<ClassesDropdown> {
   @override
   void initState() {
     super.initState();
-    futureClasses = fetchClasses();
+
+    futureClasses = Future.value([]);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      () async {
+        var prefs = await SharedPreferences.getInstance();
+        var classNames = prefs.getStringList("classNames");
+        var classIds = prefs.getStringList("classIds");
+
+        List<Class> classes = [];
+        if (classIds != null && classNames != null) {
+          for (var i = 0; i < classIds.length; i++) {
+            classes.add(Class(id: classIds[i], name: classNames[i]));
+          }
+
+          setState(() {
+            futureClasses = Future.value(classes);
+          });
+        }
+      }();
+      setState(() {
+        futureClasses = fetchClasses();
+      });
+    });
   }
 
   @override
@@ -49,7 +72,7 @@ class Classes extends State<ClassesDropdown> {
     return FutureBuilder<List<Class>>(
       future: futureClasses,
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        if (snapshot.hasData || snapshot.data == []) {
           return DropdownButton(
             value: Navigation.of(context)?.selectedClass,
             items: snapshot.data!.map<DropdownMenuItem>((e) {
@@ -65,7 +88,10 @@ class Classes extends State<ClassesDropdown> {
         }
 
         // By default, show a loading spinner.
-        return const Center(child: CircularProgressIndicator());
+        return DropdownButton(
+          items: const [DropdownMenuItem(child: Text(" "))],
+          onChanged: (s) => {},
+        );
       },
     );
   }

@@ -51,14 +51,6 @@ class NavigationState extends State<Navigation> {
     setState(() {
       lessons = fetchLessons();
     });
-
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      if (lessons == null) {
-        setState(() {
-          lessons = fetchLessons();
-        });
-      }
-    });
   }
 
   @override
@@ -118,6 +110,14 @@ class NavigationState extends State<Navigation> {
     setState(() {
       lessons = null;
       selectedClass = id;
+    });
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (lessons == null) {
+        setState(() {
+          lessons = fetchLessons();
+        });
+      }
     });
   }
 
