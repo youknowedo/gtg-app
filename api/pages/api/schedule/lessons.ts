@@ -1,5 +1,10 @@
 import { NextApiRequest } from "next";
-import Skola24, { Lesson, ParseSchedule, ScheduleData } from "skola24";
+import Skola24, {
+    Lesson,
+    ParseSchedule,
+    ScheduleData,
+    SortSchedule,
+} from "skola24";
 import { ApiResponse } from "../../../lib/api";
 import Errors from "../../../lib/api/errors";
 
@@ -9,6 +14,7 @@ type RequestData = {
     day?: 0 | 1 | 2 | 3 | 4 | 5;
     year?: number;
     parsed?: boolean;
+    sort?: boolean;
     withColors?: boolean;
 };
 
@@ -32,20 +38,24 @@ const lessons = async (
             data.year != undefined ? +(data.year || 0) : undefined
         );
 
-        if (data.parsed == "true")
+        if (data.parsed == "true") {
+            let parsedLessons = ParseSchedule(
+                lessons,
+                +(data.week || 0),
+                data.withColors
+                    ? JSON.parse((data.withColors as string) || "")
+                    : true
+            );
+            parsedLessons = SortSchedule(parsedLessons);
+
             res.status(200).json({
-                data: ParseSchedule(
-                    lessons,
-                    +(data.week || 0),
-                    data.withColors
-                        ? JSON.parse((data.withColors as string) || "")
-                        : true
-                ),
+                data: parsedLessons,
             });
-        else
+        } else {
             res.status(200).json({
                 data: lessons,
             });
+        }
 
         return;
     }
