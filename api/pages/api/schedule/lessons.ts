@@ -1,5 +1,6 @@
 import { NextApiRequest } from "next";
 import Skola24, {
+    GroupLessons,
     Lesson,
     ParseSchedule,
     ScheduleData,
@@ -15,12 +16,13 @@ type RequestData = {
     year?: number;
     parsed?: boolean;
     sort?: boolean;
+    group?: boolean;
     withColors?: boolean;
 };
 
 const lessons = async (
     req: NextApiRequest,
-    res: ApiResponse<ScheduleData | Lesson[]>
+    res: ApiResponse<ScheduleData | Lesson[] | Lesson[][]>
 ) => {
     if (req.method == "GET") {
         const data = req.query;
@@ -46,10 +48,15 @@ const lessons = async (
                     ? JSON.parse((data.withColors as string) || "")
                     : true
             );
-            parsedLessons = SortSchedule(parsedLessons);
+
+            if (data.sort != "false")
+                parsedLessons = SortSchedule(parsedLessons);
 
             res.status(200).json({
-                data: parsedLessons,
+                data:
+                    data.group == "true"
+                        ? GroupLessons(parsedLessons)
+                        : parsedLessons,
             });
         } else {
             res.status(200).json({
