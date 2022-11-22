@@ -97,7 +97,6 @@ class NavigationState extends State<Navigation> {
           ),
           Schedule(
             futureLessons: lessons,
-            refresh: refreshLessons,
           )
         ][currentPageIndex],
       ),

@@ -49,10 +49,9 @@ class Lesson {
 }
 
 class Schedule extends StatelessWidget {
-  late Future<List<Lesson>>? futureLessons;
-  late Function() refresh;
+  final Future<List<Lesson>>? futureLessons;
 
-  Schedule({super.key, this.futureLessons, required this.refresh});
+  const Schedule({super.key, this.futureLessons});
 
   @override
   Widget build(BuildContext context) {
@@ -60,94 +59,88 @@ class Schedule extends StatelessWidget {
       future: futureLessons,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return RefreshIndicator(
-            onRefresh: () => refresh(),
-            child: SingleChildScrollView(
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 20),
-                child: Wrap(
-                    alignment: WrapAlignment.start,
-                    direction: Axis.horizontal,
-                    children: snapshot.data!.map<Widget>((currentLesson) {
-                      double screenWidth = MediaQuery.of(context).size.width;
+          return SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              child: Wrap(
+                  alignment: WrapAlignment.start,
+                  direction: Axis.horizontal,
+                  children: snapshot.data!.map<Widget>((currentLesson) {
+                    double screenWidth = MediaQuery.of(context).size.width;
 
-                      return SizedBox(
-                        width: screenWidth,
-                        child: Card(
-                          semanticContainer: true,
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
+                    return SizedBox(
+                      width: screenWidth,
+                      child: Card(
+                        semanticContainer: true,
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                  color: HexColor(
+                                      currentLesson.colors?.background ??
+                                          "fff"),
+                                  width: 3),
+                            ),
                           ),
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 5, horizontal: 5),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                top: BorderSide(
-                                    color: HexColor(
-                                        currentLesson.colors?.background ??
-                                            "fff"),
-                                    width: 3),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.fromLTRB(6, 4, 6, 3),
+                                decoration: const BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(2)),
+                                    color: Colors.black26),
+                                child: Text(
+                                    "${currentLesson.from.hour}:${currentLesson.from.minute}"),
                               ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              textBaseline: TextBaseline.alphabetic,
-                              children: [
-                                Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(6, 4, 6, 3),
-                                  decoration: const BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(2)),
-                                      color: Colors.black26),
-                                  child: Text(
-                                      "${currentLesson.from.hour}:${currentLesson.from.minute}"),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 7, horizontal: 7),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 3),
-                                        child: Text(
-                                          currentLesson.name,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16),
-                                        ),
-                                      ),
-                                      Text(
-                                          "${currentLesson.teacher != "" ? "${currentLesson.teacher}; " : ""}${currentLesson.room}"),
-                                    ],
-                                  ),
-                                ),
-                                Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Container(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(6, 4, 6, 3),
-                                      decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(2)),
-                                          color: Colors.black26),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 7, horizontal: 7),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 3),
                                       child: Text(
-                                          "${currentLesson.to.hour}:${currentLesson.to.minute}"),
-                                    )),
-                              ],
-                            ),
+                                        currentLesson.name,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                      ),
+                                    ),
+                                    Text(
+                                        "${currentLesson.teacher != "" ? "${currentLesson.teacher}; " : ""}${currentLesson.room}"),
+                                  ],
+                                ),
+                              ),
+                              Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Container(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(6, 4, 6, 3),
+                                    decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(2)),
+                                        color: Colors.black26),
+                                    child: Text(
+                                        "${currentLesson.to.hour}:${currentLesson.to.minute}"),
+                                  )),
+                            ],
                           ),
                         ),
-                      );
-                    }).toList()),
-              ),
+                      ),
+                    );
+                  }).toList()),
             ),
           );
         } else if (snapshot.hasError) {
