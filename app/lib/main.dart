@@ -85,24 +85,21 @@ class NavigationState extends State<Navigation> {
                 ),
               ],
             ),
-            body: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              child: <Widget>[
-                Container(
-                  color: Colors.red,
-                  alignment: Alignment.center,
-                  child: const Text('Page 1'),
-                ),
-                Container(
-                  color: Colors.green,
-                  alignment: Alignment.center,
-                  child: const Text('Page 2'),
-                ),
-                Schedule(
-                  futureLessons: lessons,
-                )
-              ][currentPageIndex],
-            ),
+            body: <Widget>[
+              Container(
+                color: Colors.red,
+                alignment: Alignment.center,
+                child: const Text('Page 1'),
+              ),
+              Container(
+                color: Colors.green,
+                alignment: Alignment.center,
+                child: const Text('Page 2'),
+              ),
+              Schedule(
+                futureLessons: lessons,
+              )
+            ][currentPageIndex],
           );
   }
 
@@ -128,12 +125,13 @@ class NavigationState extends State<Navigation> {
   }
 
   Future<List<Lesson>> fetchLessons() async {
-    final response = await http.get(Uri.https(
-        'gtg.seabird.digital', "/api/schedule/lessons", {
+    final response = await http
+        .get(Uri.https('gtg.seabird.digital', "/api/schedule/lessons", {
       "selectionGuid": selectedClass,
       "week": "42",
       "day": "1",
-      "parsed": "true"
+      "parsed": "true",
+      "group": "true"
     }));
 
     if (response.statusCode == 200) {
@@ -141,7 +139,9 @@ class NavigationState extends State<Navigation> {
 
       List<Lesson> lessons = [];
       for (var i = 0; i < data.length; i++) {
-        lessons.add(Lesson.fromJson(data[i]));
+        for (var j = 0; j < data[i].length; j++) {
+          lessons.add(Lesson.fromJson(data[i][j], data[i].length));
+        }
       }
 
       return lessons;
