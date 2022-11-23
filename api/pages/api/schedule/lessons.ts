@@ -25,7 +25,22 @@ const lessons = async (
     res: ApiResponse<ScheduleData | Lesson[] | Lesson[][]>
 ) => {
     if (req.method == "GET") {
-        const data = req.query;
+        const data: RequestData = {
+            selectionGuid: req.query.selectionGuid as string,
+            week: +(req.query.week || 0),
+            day:
+                req.query.day != undefined
+                    ? (+req.query.day as 0 | 1 | 2 | 3 | 4 | 5)
+                    : undefined,
+            year:
+                req.query.year != undefined
+                    ? +(req.query.year || 0)
+                    : undefined,
+            parsed: req.query.parsed != "false",
+            sort: req.query.parsed != "false",
+            group: req.query.group != "false",
+            withColors: req.query.withColors != "false",
+        };
 
         const session = await Skola24.connect(
             "goteborgstekniskacollege.skola24.se"
@@ -40,24 +55,18 @@ const lessons = async (
             data.year != undefined ? +(data.year || 0) : undefined
         );
 
-        if (data.parsed == "true") {
+        if (data.parsed) {
             let parsedLessons = ParseSchedule(
                 lessons,
                 +(data.week || 0),
                 +(data.year || new Date().getFullYear()),
                 data.withColors
-                    ? JSON.parse((data.withColors as string) || "")
-                    : true
             );
 
-            if (data.sort != "false")
-                parsedLessons = SortSchedule(parsedLessons);
+            if (data.sort) parsedLessons = SortSchedule(parsedLessons);
 
             res.status(200).json({
-                data:
-                    data.group == "true"
-                        ? GroupLessons(parsedLessons)
-                        : parsedLessons,
+                data: data.group ? GroupLessons(parsedLessons) : parsedLessons,
             });
         } else {
             res.status(200).json({
