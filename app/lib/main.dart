@@ -125,11 +125,11 @@ class NavigationState extends State<Navigation> {
   }
 
   Future<List<Lesson>> fetchLessons() async {
-    final response = await http
-        .get(Uri.https('gtg.seabird.digital', "/api/schedule/lessons", {
+    final response =
+        await http.get(Uri.http('localhost:3000', "/api/schedule/lessons", {
       "selectionGuid": selectedClass,
-      "week": "42",
-      "day": "1",
+      "week": "47",
+      "day": "3",
       "parsed": "true",
       "group": "true"
     }));
@@ -138,9 +138,14 @@ class NavigationState extends State<Navigation> {
       var data = jsonDecode(response.body)["data"];
 
       List<Lesson> lessons = [];
+      Lesson? previousLesson;
       for (var i = 0; i < data.length; i++) {
         for (var j = 0; j < data[i].length; j++) {
-          lessons.add(Lesson.fromJson(data[i][j], data[i].length));
+          var newLesson =
+              Lesson.fromJson(data[i][j], data[i].length, previousLesson);
+          lessons.add(newLesson);
+
+          previousLesson = newLesson;
         }
       }
 

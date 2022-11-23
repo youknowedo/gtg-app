@@ -97,8 +97,6 @@ class Classes extends State<ClassesDropdown> {
   }
 }
 
-class DateFormat {}
-
 Future<List<Class>> fetchClasses() async {
   final response =
       await http.get(Uri.https('gtg.seabird.digital', "/api/schedule/classes"));
