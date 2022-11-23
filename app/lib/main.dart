@@ -126,8 +126,8 @@ class NavigationState extends State<Navigation> {
   }
 
   Future<List<Lesson>> fetchLessons() async {
-    final response =
-        await http.get(Uri.http('localhost:3000', "/api/schedule/lessons", {
+    final response = await http
+        .get(Uri.https('gtg.seabird.digital', "/api/schedule/lessons", {
       "selectionGuid": selectedClass,
       "week": "47",
       "day": "3",

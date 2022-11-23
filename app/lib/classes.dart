@@ -72,7 +72,7 @@ class Classes extends State<ClassesDropdown> {
     return FutureBuilder<List<Class>>(
       future: futureClasses,
       builder: (context, snapshot) {
-        if (snapshot.hasData || snapshot.data == []) {
+        if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           return DropdownButton(
             value: Navigation.of(context)?.selectedClass,
             items: snapshot.data!.map<DropdownMenuItem>((e) {
@@ -88,10 +88,7 @@ class Classes extends State<ClassesDropdown> {
         }
 
         // By default, show a loading spinner.
-        return DropdownButton(
-          items: const [DropdownMenuItem(child: Text(" "))],
-          onChanged: (s) => {},
-        );
+        return Container();
       },
     );
   }
