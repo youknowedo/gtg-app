@@ -44,6 +44,7 @@ const lessons = async (
             let parsedLessons = ParseSchedule(
                 lessons,
                 +(data.week || 0),
+                +(data.year || new Date().getFullYear()),
                 data.withColors
                     ? JSON.parse((data.withColors as string) || "")
                     : true
