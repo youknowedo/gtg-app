@@ -70,8 +70,9 @@ class Lesson {
 
 class Schedule extends StatelessWidget {
   final Future<List<Lesson>>? futureLessons;
+  final Future<void> Function() refresh;
 
-  const Schedule({super.key, this.futureLessons});
+  const Schedule({super.key, this.futureLessons, required this.refresh});
 
   @override
   Widget build(BuildContext context) {
@@ -79,105 +80,115 @@ class Schedule extends StatelessWidget {
       future: futureLessons,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return SingleChildScrollView(
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 20),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Wrap(
-                    alignment: WrapAlignment.start,
-                    direction: Axis.horizontal,
-                    children: snapshot.data!.map<Widget>((currentLesson) {
-                      double screenWidth = MediaQuery.of(context).size.width;
-                      double cardWidth =
-                          screenWidth * (1 / currentLesson.numberInRow) -
-                              (20 / currentLesson.numberInRow);
+          return RefreshIndicator(
+            onRefresh: refresh,
+            child: SingleChildScrollView(
+              clipBehavior: Clip.none,
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Wrap(
+                      alignment: WrapAlignment.start,
+                      direction: Axis.horizontal,
+                      children: snapshot.data!.map<Widget>((currentLesson) {
+                        double screenWidth = MediaQuery.of(context).size.width;
+                        double cardWidth =
+                            screenWidth * (1 / currentLesson.numberInRow) -
+                                (20 / currentLesson.numberInRow);
 
-                      bool passed = currentLesson.to.millisecondsSinceEpoch <
-                          DateTime.now().millisecondsSinceEpoch;
+                        bool passed = currentLesson.to.millisecondsSinceEpoch <
+                            DateTime.now().millisecondsSinceEpoch;
 
-                      return SizedBox(
-                        width: cardWidth,
-                        child: Card(
-                          semanticContainer: true,
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          margin: EdgeInsets.only(
-                              left: 5,
-                              right: 5,
-                              bottom: 5,
-                              top: currentLesson.topMargin),
-                          child: Opacity(
-                            opacity: passed ? .5 : 1,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 10),
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  top: BorderSide(
-                                      color: HexColor(
-                                          currentLesson.colors?.background ??
-                                              "fff"),
-                                      width: 3),
+                        return SizedBox(
+                          width: cardWidth,
+                          child: Card(
+                            semanticContainer: true,
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            margin: EdgeInsets.only(
+                                left: 5,
+                                right: 5,
+                                bottom: 5,
+                                top: currentLesson.topMargin),
+                            child: Opacity(
+                              opacity: passed ? .5 : 1,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    top: BorderSide(
+                                        color: HexColor(
+                                            currentLesson.colors?.background ??
+                                                "fff"),
+                                        width: 3),
+                                  ),
                                 ),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.baseline,
-                                textBaseline: TextBaseline.alphabetic,
-                                children: [
-                                  Container(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(6, 4, 6, 3),
-                                    decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(2)),
-                                        color: Colors.black26),
-                                    child: Text(
-                                        "${currentLesson.from.toLocal().hour}:${currentLesson.from.toLocal().minute.toString().padLeft(2, "0")}"),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 7, horizontal: 7),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 3),
-                                          child: Text(
-                                            currentLesson.name,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14),
-                                          ),
-                                        ),
-                                        Text(
-                                            "${currentLesson.teacher != "" ? "${currentLesson.teacher}; " : ""}${currentLesson.room}"),
-                                      ],
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.alphabetic,
+                                  children: [
+                                    Container(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(6, 4, 6, 3),
+                                      decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(2)),
+                                          color: Colors.black26),
+                                      child: Text(
+                                          "${currentLesson.from.toLocal().hour}:${currentLesson.from.toLocal().minute.toString().padLeft(2, "0")}"),
                                     ),
-                                  ),
-                                  Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Container(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            6, 4, 6, 3),
-                                        decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(2)),
-                                            color: Colors.black26),
-                                        child: Text(
-                                            "${currentLesson.to.toLocal().hour}:${currentLesson.to.toLocal().minute.toString().padLeft(2, "0")}"),
-                                      )),
-                                ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 7,
+                                        right: 7,
+                                        top: 12,
+                                        bottom: 10,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 3),
+                                            child: Text(
+                                              currentLesson.name,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14),
+                                            ),
+                                          ),
+                                          Text(
+                                              "${currentLesson.teacher != "" ? "${currentLesson.teacher}; " : ""}${currentLesson.room}"),
+                                        ],
+                                      ),
+                                    ),
+                                    Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Container(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              6, 4, 6, 3),
+                                          decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(2)),
+                                              color: Colors.black26),
+                                          child: Text(
+                                              "${currentLesson.to.toLocal().hour}:${currentLesson.to.toLocal().minute.toString().padLeft(2, "0")}"),
+                                        )),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    }).toList()),
+                        );
+                      }).toList()),
+                ),
               ),
             ),
           );

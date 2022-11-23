@@ -98,6 +98,7 @@ class NavigationState extends State<Navigation> {
               ),
               Schedule(
                 futureLessons: lessons,
+                refresh: refreshLessons,
               )
             ][currentPageIndex],
           );
@@ -118,7 +119,7 @@ class NavigationState extends State<Navigation> {
     });
   }
 
-  refreshLessons() {
+  Future<void> refreshLessons() async {
     setState(() {
       lessons = fetchLessons();
     });
