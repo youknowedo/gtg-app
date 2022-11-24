@@ -1,6 +1,8 @@
 import 'dart:convert';
 
-import 'package:app/schedule.dart';
+import 'package:app/pages/home.dart';
+import 'package:app/pages/schedule.dart';
+import 'package:app/widgets/exams.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:http/http.dart' as http;
@@ -42,6 +44,7 @@ class NavigationState extends State<Navigation> {
   int currentPageIndex = 2;
 
   String selectedClass = "MTJhNTBiNjktNjhhZS1mMTNhLWEzYjEtNGM2NGZhZmE1ZDhi";
+  late Future<List<Exam>>? exams;
   late Future<List<Lesson>>? lessons;
 
   @override
@@ -50,6 +53,7 @@ class NavigationState extends State<Navigation> {
 
     setState(() {
       lessons = fetchLessons();
+      exams = fetchExams();
     });
   }
 
@@ -75,8 +79,9 @@ class NavigationState extends State<Navigation> {
                   label: 'Explore',
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.commute),
-                  label: 'Commute',
+                  selectedIcon: Icon(Icons.house_outlined),
+                  icon: Icon(Icons.house),
+                  label: 'Översikt',
                 ),
                 NavigationDestination(
                   selectedIcon: Icon(Icons.calendar_view_day),
@@ -94,7 +99,7 @@ class NavigationState extends State<Navigation> {
               Container(
                 color: Colors.green,
                 alignment: Alignment.center,
-                child: const Text('Page 2'),
+                child: Home(futureExams: exams),
               ),
               Schedule(
                 futureLessons: lessons,
@@ -117,6 +122,34 @@ class NavigationState extends State<Navigation> {
         });
       }
     });
+  }
+
+  Future<List<Exam>> fetchExams() async {
+    final response =
+        await http.get(Uri.https('gtg.seabird.digital', "/api/schedule/exams", {
+      "week": "38",
+    }));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+
+      List<Exam> exams = [];
+      for (var i = 0; i < data.length; i++) {
+        var h = data;
+        var date = DateTime.parse(data[i].date);
+
+        for (var j = 0; j < data[i].exams.length; j++) {
+          var newExam = Exam.fromJson(data[i].exams[j], date);
+          exams.add(newExam);
+        }
+      }
+
+      return exams;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load Lesson');
+    }
   }
 
   Future<void> refreshLessons() async {
