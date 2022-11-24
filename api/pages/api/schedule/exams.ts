@@ -4,8 +4,13 @@ import { NextApiRequest } from "next";
 import { ApiResponse } from "../../../lib/api";
 import Errors from "../../../lib/api/errors";
 
-const weekExp = /v.([1-5]){1,2}/;
+const weekExp = /v[.]([1-5]){1,2}/;
 const dayExp = /(.){3}[ ]/;
+
+type RequestData = {
+    week?: number;
+    year: number;
+};
 
 type ExamData = {
     date: Date;
@@ -22,6 +27,13 @@ type Exam = {
 
 const exams = async (req: NextApiRequest, res: ApiResponse<ExamData[]>) => {
     if (req.method == "GET") {
+        const today = new Date();
+
+        const data: RequestData = {
+            week: req.query.week ? +req.query.week : undefined,
+            year: req.query.year ? +req.query.year : today.getFullYear(),
+        };
+
         const schedule = await fetch(
             "https://www.gtc.com/provschema/kalender.asp?klass=T1c"
         );
@@ -47,7 +59,6 @@ const exams = async (req: NextApiRequest, res: ApiResponse<ExamData[]>) => {
             if (notEmptyTexts.length > 0) texts.push(notEmptyTexts);
         }
 
-        const today = new Date();
         const firstDateText = texts[0][0];
         const date = new Date(
             today.getFullYear(),
@@ -56,7 +67,7 @@ const exams = async (req: NextApiRequest, res: ApiResponse<ExamData[]>) => {
         );
         if (date > today) date.setFullYear(date.getFullYear() - 1);
 
-        const examData: ExamData[] = [];
+        let examData: ExamData[] = [];
         for (const d of days) {
             const ts = d.contents().toArray();
 
@@ -150,6 +161,22 @@ const exams = async (req: NextApiRequest, res: ApiResponse<ExamData[]>) => {
                     date: new Date(date),
                     exams,
                 });
+        }
+
+        if (data.week) {
+            const days = data.week * 7 - (data.year % 7) + 1;
+
+            const filteredExamData: ExamData[] = [];
+            for (const day of examData) {
+                console.log(day.date);
+                if (
+                    day.date >= new Date(data.year, 0, days + 1) &&
+                    day.date <= new Date(data.year, 0, days + 7)
+                )
+                    filteredExamData.push(day);
+            }
+
+            examData = filteredExamData;
         }
 
         res.status(200).json({ data: examData });
