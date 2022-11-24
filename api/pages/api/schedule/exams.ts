@@ -1,4 +1,3 @@
-import axios from "axios";
 import { load } from "cheerio";
 import { NextApiRequest } from "next";
 import { ApiResponse } from "../../../lib/api";
