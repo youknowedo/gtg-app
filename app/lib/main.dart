@@ -79,8 +79,8 @@ class NavigationState extends State<Navigation> {
                   label: 'Explore',
                 ),
                 NavigationDestination(
-                  selectedIcon: Icon(Icons.house_outlined),
-                  icon: Icon(Icons.house),
+                  selectedIcon: Icon(Icons.house),
+                  icon: Icon(Icons.house_outlined),
                   label: 'Översikt',
                 ),
                 NavigationDestination(
@@ -96,11 +96,7 @@ class NavigationState extends State<Navigation> {
                 alignment: Alignment.center,
                 child: const Text('Page 1'),
               ),
-              Container(
-                color: Colors.green,
-                alignment: Alignment.center,
-                child: Home(futureExams: exams),
-              ),
+              Home(futureExams: exams),
               Schedule(
                 futureLessons: lessons,
                 refresh: refreshLessons,
@@ -131,15 +127,14 @@ class NavigationState extends State<Navigation> {
     }));
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+      var data = jsonDecode(response.body)["data"];
 
       List<Exam> exams = [];
       for (var i = 0; i < data.length; i++) {
-        var h = data;
-        var date = DateTime.parse(data[i].date);
+        var date = DateTime.parse(data[i]["date"]);
 
-        for (var j = 0; j < data[i].exams.length; j++) {
-          var newExam = Exam.fromJson(data[i].exams[j], date);
+        for (var j = 0; j < data[i]["exams"].length; j++) {
+          var newExam = Exam.fromJson(data[i]["exams"][j], date);
           exams.add(newExam);
         }
       }

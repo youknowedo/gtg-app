@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 class Exam {
   final DateTime date;
 
-  final String type;
-  final String name;
-  final String teacher;
+  final String? type;
+  final String? name;
+  final String? teacher;
 
   final DateTime registered;
 
@@ -43,66 +43,75 @@ class Exams extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 20),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Wrap(
-                  alignment: WrapAlignment.start,
-                  direction: Axis.horizontal,
-                  children: snapshot.data!.map<Widget>((currentExam) {
-                    bool passed = currentExam.date.millisecondsSinceEpoch <
-                        DateTime.now().millisecondsSinceEpoch;
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("Händelser"),
+                    ...snapshot.data!.map<Widget>((currentExam) {
+                      double screenWidth = MediaQuery.of(context).size.width;
 
-                    return Card(
-                      semanticContainer: true,
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      margin: const EdgeInsets.all(5),
-                      child: Opacity(
-                        opacity: passed ? .5 : 1,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              top: BorderSide(
-                                  color: HexColor("ff0000"), width: 3),
-                            ),
+                      bool passed = currentExam.date.millisecondsSinceEpoch <
+                          DateTime.now().millisecondsSinceEpoch;
+
+                      return SizedBox(
+                        width: screenWidth,
+                        child: Card(
+                          semanticContainer: true,
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            textBaseline: TextBaseline.alphabetic,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 7,
-                                  right: 7,
-                                  top: 12,
-                                  bottom: 10,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(bottom: 3),
-                                      child: Text(
-                                        currentExam.name,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14),
-                                      ),
-                                    ),
-                                    Text(currentExam.teacher != ""
-                                        ? "${currentExam.teacher}; "
-                                        : ""),
-                                  ],
+                          margin: const EdgeInsets.all(5),
+                          child: Opacity(
+                            opacity: passed ? .5 : 1,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  top: BorderSide(
+                                      color: HexColor("ff0000"), width: 3),
                                 ),
                               ),
-                            ],
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 7,
+                                      right: 7,
+                                      top: 12,
+                                      bottom: 10,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 3),
+                                          child: Text(
+                                            currentExam.name ?? "",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14),
+                                          ),
+                                        ),
+                                        Text(currentExam.teacher != ""
+                                            ? "${currentExam.teacher}; "
+                                            : ""),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }).toList()),
+                      );
+                    }).toList()
+                  ]),
             ),
           );
         } else if (snapshot.hasError) {
