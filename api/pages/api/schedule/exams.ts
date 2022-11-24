@@ -7,6 +7,7 @@ const weekExp = /v[.]([1-5]){1,2}/;
 const dayExp = /(.){3}[ ]/;
 
 type RequestData = {
+    class: string;
     week?: number;
     year: number;
 };
@@ -30,12 +31,16 @@ const exams = async (req: NextApiRequest, res: ApiResponse<ExamData[]>) => {
         const today = new Date();
 
         const data: RequestData = {
+            class: (req.query.class as string) || "T1c",
             week: req.query.week ? +req.query.week : undefined,
             year: req.query.year ? +req.query.year : today.getFullYear(),
         };
 
         const schedule = await fetch(
-            "https://www.gtc.com/provschema/kalender.asp?klass=T1c"
+            "https://www.gtc.com/provschema/kalender.asp?" +
+                new URLSearchParams({
+                    klass: data.class,
+                })
         );
         const $ = load(await schedule.text());
 
