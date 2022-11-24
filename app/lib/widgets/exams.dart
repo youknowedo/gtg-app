@@ -1,10 +1,12 @@
-import 'package:app/utils.dart';
 import 'package:flutter/material.dart';
+
+import '../utlis.dart';
 
 class Exam {
   final DateTime date;
 
   final String? type;
+  final String? typeColor;
   final String? name;
   final String? teacher;
 
@@ -13,6 +15,7 @@ class Exam {
   Exam({
     required this.date,
     required this.type,
+    required this.typeColor,
     required this.name,
     required this.teacher,
     required this.registered,
@@ -22,6 +25,7 @@ class Exam {
     return Exam(
         date: date,
         type: json["type"],
+        typeColor: json["typeColor"],
         name: json["name"],
         teacher: json["teacher"],
         registered: DateTime.parse(json["registered"]));
@@ -53,6 +57,18 @@ class Exams extends StatelessWidget {
                       bool passed = currentExam.date.millisecondsSinceEpoch <
                           DateTime.now().millisecondsSinceEpoch;
 
+                      Color color;
+                      switch (currentExam.typeColor) {
+                        case "blue":
+                          color = Colors.blue;
+                          break;
+                        case "green":
+                          color = Colors.green;
+                          break;
+                        default:
+                          color = Colors.red;
+                      }
+
                       return SizedBox(
                         width: screenWidth,
                         child: Card(
@@ -69,19 +85,37 @@ class Exams extends StatelessWidget {
                                   horizontal: 10, vertical: 10),
                               decoration: BoxDecoration(
                                 border: Border(
-                                  top: BorderSide(
-                                      color: HexColor("ff0000"), width: 3),
+                                  top: BorderSide(color: color, width: 3),
                                 ),
                               ),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.baseline,
-                                textBaseline: TextBaseline.alphabetic,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  Container(
+                                    padding: currentExam.type != null || passed
+                                        ? const EdgeInsets.fromLTRB(6, 4, 6, 3)
+                                        : null,
+                                    decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(2)),
+                                        color: Colors.black26),
+                                    child: Wrap(
+                                      children: [
+                                        Text(currentExam.type ?? ""),
+                                        Text(currentExam.type != null && passed
+                                            ? ": "
+                                            : ""),
+                                        Text(passed ? "Passerat" : "",
+                                            style: const TextStyle(
+                                                fontStyle: FontStyle.italic)),
+                                      ],
+                                    ),
+                                  ),
                                   Padding(
-                                    padding: const EdgeInsets.only(
+                                    padding: EdgeInsets.only(
                                       left: 7,
                                       right: 7,
-                                      top: 12,
+                                      top: currentExam.type != null ? 14 : 8,
                                       bottom: 10,
                                     ),
                                     child: Column(
@@ -104,6 +138,17 @@ class Exams extends StatelessWidget {
                                       ],
                                     ),
                                   ),
+                                  Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Container(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              6, 4, 6, 4),
+                                          decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(2)),
+                                              color: Colors.black26),
+                                          child: Text(Weekday[
+                                              currentExam.date.weekday - 1]))),
                                 ],
                               ),
                             ),
