@@ -44,6 +44,7 @@ class NavigationState extends State<Navigation> {
   int currentPageIndex = 2;
 
   String selectedClass = "MTJhNTBiNjktNjhhZS1mMTNhLWEzYjEtNGM2NGZhZmE1ZDhi";
+  String selectedClassName = "T1c";
   late Future<List<Exam>>? exams;
   late Future<List<Lesson>>? lessons;
 
@@ -105,16 +106,18 @@ class NavigationState extends State<Navigation> {
           );
   }
 
-  updateSelectedClass(String id) {
+  updateSelectedClass(Class c) {
     setState(() {
       lessons = null;
-      selectedClass = id;
+      selectedClass = c.id;
+      selectedClassName = c.name;
     });
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (lessons == null) {
         setState(() {
           lessons = fetchLessons();
+          exams = fetchExams();
         });
       }
     });
@@ -123,6 +126,7 @@ class NavigationState extends State<Navigation> {
   Future<List<Exam>> fetchExams() async {
     final response =
         await http.get(Uri.https('gtg.seabird.digital', "/api/schedule/exams", {
+      "class": selectedClassName,
       "week": "38",
     }));
 

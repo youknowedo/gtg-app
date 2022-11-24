@@ -21,7 +21,7 @@ class Class {
 }
 
 class ClassesDropdown extends StatefulWidget {
-  final Function(String id)? updateSelectedClass;
+  final Function(Class c)? updateSelectedClass;
 
   const ClassesDropdown({
     super.key,
@@ -81,7 +81,17 @@ class Classes extends State<ClassesDropdown> {
                 child: Text(e.name),
               );
             }).toList(),
-            onChanged: (s) => widget.updateSelectedClass!(s),
+            onChanged: (s) async {
+              Class c = const Class(id: "", name: "");
+              for (var fc in await futureClasses) {
+                if (fc.id == s) {
+                  c = fc;
+                  break;
+                }
+              }
+
+              widget.updateSelectedClass!(c);
+            },
           );
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
