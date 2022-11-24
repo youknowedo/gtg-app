@@ -96,8 +96,7 @@ const exams = async (req: NextApiRequest, res: ApiResponse<ExamData[]>) => {
                 ) {
                     e.type = $($(ts).get(i)).text().trim();
 
-                    const color = ($(ts).get(i) as HTMLElement | undefined)
-                        ?.className;
+                    const color = $($(ts).get(i)).attr("class");
 
                     switch (color) {
                         case "normalbl\ufffd":
