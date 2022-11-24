@@ -100,10 +100,10 @@ const exams = async (req: NextApiRequest, res: ApiResponse<ExamData[]>) => {
                         ?.className;
 
                     switch (color) {
-                        case "normalbl�":
+                        case "normalbl\ufffd":
                             e.typeColor = "blue";
                             break;
-                        case "normalgr�n":
+                        case "normalgr\ufffdn":
                             e.typeColor = "green";
                             break;
                         default:
