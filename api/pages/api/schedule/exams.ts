@@ -9,13 +9,10 @@ const dayExp = /(.){3}[ ]/;
 
 const exams = async (req: NextApiRequest, res: ApiResponse<unknown>) => {
     if (req.method == "GET") {
-        const schedule = await axios.get(
-            "https://www.gtc.com/provschema/kalender.asp?klass=T1c",
-            {
-                responseType: "text",
-            }
+        const schedule = await fetch(
+            "https://www.gtc.com/provschema/kalender.asp?klass=T1c"
         );
-        const $ = load(schedule.data);
+        const $ = load(await schedule.text());
 
         const days = $("tr td")
             .map((_, d) => $(d))
