@@ -18,6 +18,7 @@ type ExamData = {
 
 type Exam = {
     type?: string;
+    typeColor?: string;
     name?: string;
     teacher?: string;
 
@@ -94,6 +95,20 @@ const exams = async (req: NextApiRequest, res: ApiResponse<ExamData[]>) => {
                     ($(ts).get(i) as HTMLElement | undefined)?.tagName == "span"
                 ) {
                     e.type = $($(ts).get(i)).text().trim();
+
+                    const color = ($(ts).get(i) as HTMLElement | undefined)
+                        ?.className;
+
+                    switch (color) {
+                        case "normalbl�":
+                            e.typeColor = "blue";
+                            break;
+                        case "normalgr�n":
+                            e.typeColor = "green";
+                            break;
+                        default:
+                            e.typeColor = "red";
+                    }
 
                     do i++;
                     while (
