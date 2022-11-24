@@ -4,21 +4,16 @@ import { NextApiRequest } from "next";
 import { ApiResponse } from "../../../lib/api";
 import Errors from "../../../lib/api/errors";
 
-type RequestData = {
-    selectionGuid: string;
-    week: number;
-    day?: 0 | 1 | 2 | 3 | 4 | 5;
-    year?: number;
-    parsed?: boolean;
-    sort?: boolean;
-    group?: boolean;
-    withColors?: boolean;
-};
+const weekExp = /v.([1-5]){1,2}/;
+const dayExp = /(.){3}[ ]/;
 
 const exams = async (req: NextApiRequest, res: ApiResponse<unknown>) => {
     if (req.method == "GET") {
         const schedule = await axios.get(
-            "https://www.gtc.com/provschema/kalender.asp?klass=T1c"
+            "https://www.gtc.com/provschema/kalender.asp?klass=T1c",
+            {
+                responseType: "text",
+            }
         );
         const $ = load(schedule.data);
 
@@ -28,11 +23,15 @@ const exams = async (req: NextApiRequest, res: ApiResponse<unknown>) => {
 
         const texts: string[][] = [];
         for (const d of days) {
-            const ts = d.text().split(" ");
+            const ts = d.contents().toArray();
 
             let notEmptyTexts: string[] = [];
             for (const t of ts) {
-                if (t != "") notEmptyTexts.push(t);
+                let text = $(t).text().trim();
+
+                if (dayExp.test(text)) text = text.substring(4);
+
+                if (text != "" && !weekExp.test(text)) notEmptyTexts.push(text);
             }
 
             if (notEmptyTexts.length > 0) texts.push(notEmptyTexts);
