@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../utlis.dart';
+import '../utils.dart';
 
 class Exam {
   final DateTime date;

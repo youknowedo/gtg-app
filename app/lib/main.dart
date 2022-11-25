@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app/pages/home.dart';
 import 'package:app/pages/schedule.dart';
+import 'package:app/utils.dart';
 import 'package:app/widgets/exams.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -41,7 +42,7 @@ class Navigation extends StatefulWidget {
 }
 
 class NavigationState extends State<Navigation> {
-  int currentPageIndex = 2;
+  int currentPageIndex = 1;
 
   String selectedClass = "MTJhNTBiNjktNjhhZS1mMTNhLWEzYjEtNGM2NGZhZmE1ZDhi";
   String selectedClassName = "T1c";
@@ -52,9 +53,13 @@ class NavigationState extends State<Navigation> {
   void initState() {
     super.initState();
 
+    var now = DateTime.now();
+    var startOfYear = DateTime(now.year, 1, 1);
+    var week = weeksBetween(startOfYear, now);
+
     setState(() {
-      lessons = fetchLessons();
-      exams = fetchExams();
+      lessons = fetchLessons(week, now.year);
+      exams = fetchExams(week, now.year);
     });
   }
 
@@ -114,21 +119,24 @@ class NavigationState extends State<Navigation> {
     });
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
+      var now = DateTime.now();
+      var startOfYear = DateTime(now.year, 1, 1);
+      var week = weeksBetween(startOfYear, now);
+
       if (lessons == null) {
         setState(() {
-          lessons = fetchLessons();
-          exams = fetchExams();
+          lessons = fetchLessons(week, now.year);
+          exams = fetchExams(week, now.year);
         });
       }
     });
   }
 
-  Future<List<Exam>> fetchExams() async {
-    final response =
-        await http.get(Uri.https('gtg.seabird.digital', "/api/schedule/exams", {
-      "class": selectedClassName,
-      "week": "38",
-    }));
+  Future<List<Exam>> fetchExams(int week, int year) async {
+    final response = await http.get(Uri.https(
+        'gtg.seabird.digital',
+        "/api/schedule/exams",
+        {"class": selectedClassName, "week": "$week", "year": "$year"}));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body)["data"];
@@ -152,17 +160,21 @@ class NavigationState extends State<Navigation> {
   }
 
   Future<void> refreshLessons() async {
+    var now = DateTime.now();
+    var startOfYear = DateTime(now.year, 1, 1);
+    var week = weeksBetween(startOfYear, now);
+
     setState(() {
-      lessons = fetchLessons();
+      lessons = fetchLessons(week, now.year);
     });
   }
 
-  Future<List<Lesson>> fetchLessons() async {
+  Future<List<Lesson>> fetchLessons(int week, int year) async {
     final response = await http
         .get(Uri.https('gtg.seabird.digital', "/api/schedule/lessons", {
       "selectionGuid": selectedClass,
-      "week": "47",
-      "day": "3",
+      "week": "$week",
+      "year": "$year",
       "parsed": "true",
       "group": "true"
     }));

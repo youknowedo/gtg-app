@@ -68,11 +68,40 @@ class Lesson {
   }
 }
 
-class Schedule extends StatelessWidget {
+class Schedule extends StatefulWidget {
   final Future<List<Lesson>>? futureLessons;
   final Future<void> Function() refresh;
 
   const Schedule({super.key, this.futureLessons, required this.refresh});
+
+  static of(BuildContext context, {bool root = false}) => root
+      ? context.findRootAncestorStateOfType<ScheduleState>()
+      : context.findAncestorStateOfType<ScheduleState>();
+
+  @override
+  State<Schedule> createState() => ScheduleState();
+}
+
+class ScheduleState extends State<Schedule> {
+  Future<List<Lesson>>? futureLessons;
+  int weekDay = DateTime.now().weekday;
+
+  @override
+  void initState() {
+    super.initState();
+    () async {
+      List<Lesson> daySchedule = [];
+      List<Lesson> weekSchedule = await widget.futureLessons ?? [];
+
+      for (var lesson in weekSchedule) {
+        if (lesson.dayOfWeek == weekDay) daySchedule.add(lesson);
+      }
+
+      setState(() {
+        futureLessons = Future.value(daySchedule);
+      });
+    }();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +110,7 @@ class Schedule extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return RefreshIndicator(
-            onRefresh: refresh,
+            onRefresh: widget.refresh,
             child: SingleChildScrollView(
               clipBehavior: Clip.none,
               physics: const AlwaysScrollableScrollPhysics(),

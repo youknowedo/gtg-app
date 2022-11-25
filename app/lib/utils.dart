@@ -11,3 +11,19 @@ class HexColor extends Color {
 
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
+
+int weeksBetween(DateTime from, DateTime to) {
+  from = DateTime.utc(from.year, from.month, from.day);
+  to = DateTime.utc(to.year, to.month, to.day);
+  return (to.difference(from).inDays / 7).ceil();
+}
+
+List<String> Weekday = [
+  "Måndag",
+  "Tisdag",
+  "Onsdag",
+  "Torsdag",
+  "Fredag",
+  "Lördag",
+  "Söndag"
+];
