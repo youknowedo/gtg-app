@@ -50,7 +50,7 @@ class Exams extends StatelessWidget {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Händelser"),
+                    const Text("Denna veckan:"),
                     ...snapshot.data!.map<Widget>((currentExam) {
                       double screenWidth = MediaQuery.of(context).size.width;
 
