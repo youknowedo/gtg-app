@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:http/http.dart' as http;
 
-import 'classes.dart';
+import 'widgets/classes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -102,7 +102,7 @@ class NavigationState extends State<Navigation> {
                 alignment: Alignment.center,
                 child: const Text('Page 1'),
               ),
-              Home(futureExams: exams),
+              Home(futureLessons: lessons, futureExams: exams),
               Schedule(
                 futureLessons: lessons,
                 refresh: refreshLessons,

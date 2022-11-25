@@ -176,7 +176,7 @@ class ScheduleState extends State<Schedule> {
                                       padding: const EdgeInsets.only(
                                         left: 7,
                                         right: 7,
-                                        top: 12,
+                                        top: 14,
                                         bottom: 10,
                                       ),
                                       child: Column(

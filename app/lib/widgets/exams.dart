@@ -115,23 +115,11 @@ class Exams extends StatelessWidget {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 3),
-                                          child: Wrap(
-                                            children: [
-                                              Text(passed ? "Passerat" : "",
-                                                  style: const TextStyle(
-                                                      fontStyle:
-                                                          FontStyle.italic)),
-                                              Text(currentExam.name != null &&
-                                                      passed
-                                                  ? ": "
-                                                  : ""),
-                                              Text(
-                                                currentExam.name ?? "",
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14),
-                                              ),
-                                            ],
+                                          child: Text(
+                                            currentExam.name ?? "",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14),
                                           ),
                                         ),
                                         Text(currentExam.teacher != ""
