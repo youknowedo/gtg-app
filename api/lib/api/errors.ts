@@ -7,6 +7,18 @@ namespace Errors {
             message: `Method "${method}" is not allowed.`,
         };
     };
+
+    export const MissingParameter = (
+        parameterMissing: string,
+        type?: string
+    ): RError => {
+        return {
+            code: "GA-E422",
+            message: `Parameter "${parameterMissing}" is missing or of wrong type.${
+                type ? ` Required type is "${type}."` : ""
+            }`,
+        };
+    };
 }
 
 export default Errors;
