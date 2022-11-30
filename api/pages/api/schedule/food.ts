@@ -23,9 +23,9 @@ type Dish = {
 };
 
 const nordrestTypeExp = /^[^0-9]+/;
-const nordrestNameExp = /(?<=: )((?![(](.[)]|(.[,)]))).)+/;
+const nordrestNameExp = /(?<=: ).+(?=[(](.|((.,)+.))[)])/;
 const nordrestPriceExp = /[0-9]+/;
-const nordrestAllergiesExp = /(?<=[(])[^)]+/;
+const nordrestAllergiesExp = /(.|((.,)+.))(?=[)]$)/;
 
 const dishes = async (req: NextApiRequest, res: ApiResponse<FoodData[]>) => {
     if (req.method == "GET") {
