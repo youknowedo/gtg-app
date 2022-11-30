@@ -58,7 +58,7 @@ const dishes = async (req: NextApiRequest, res: ApiResponse<FoodData[]>) => {
 
         let foodData: FoodData[] = [];
 
-        const days = $(".menu-item").toArray();
+        const days = $("#current .menu-item").toArray();
         for (let i = 0; i < days.length; i++) {
             const d = days[i];
 
@@ -68,14 +68,16 @@ const dishes = async (req: NextApiRequest, res: ApiResponse<FoodData[]>) => {
             date = new Date(
                 date.setDate(date.getDate() - ((date.getDay() + 6) % 7))
             );
-            const ds = $(d).find("p:not(.eng-menu)").toArray();
+            const ds = $(d).find("> p:not(.eng-meny)").toArray();
             for (const dish of ds) {
                 const texts = $(dish).text();
+                console.log(texts);
 
-                const type = (nordrestTypeExp.exec(texts) || [""])[0];
+                const type = (nordrestTypeExp.exec(texts) || [""])[0].trim();
                 const name = (nordrestNameExp.exec(texts) || [""])[0];
                 const price = (nordrestPriceExp.exec(texts) || [""])[0];
                 const allergies = (nordrestAllergiesExp.exec(texts) || [""])[0];
+
                 dishes.push({
                     type,
                     name,
