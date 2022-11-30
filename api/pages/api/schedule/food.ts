@@ -23,7 +23,7 @@ type Dish = {
 };
 
 const nordrestTypeExp = /^[^0-9]+/;
-const nordrestNameExp = /(?<=: )[^(]+/;
+const nordrestNameExp = /(?<=: )((?![(](.[)]|(.[,)]))).)+/;
 const nordrestPriceExp = /[0-9]+/;
 const nordrestAllergiesExp = /(?<=[(])[^)]+/;
 
