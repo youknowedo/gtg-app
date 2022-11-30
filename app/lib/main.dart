@@ -4,6 +4,7 @@ import 'package:app/pages/home.dart';
 import 'package:app/pages/schedule.dart';
 import 'package:app/utils.dart';
 import 'package:app/widgets/exams.dart';
+import 'package:app/widgets/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:http/http.dart' as http;
@@ -48,6 +49,8 @@ class NavigationState extends State<Navigation> {
   String selectedClassName = "T1c";
   late Future<List<Exam>>? exams;
   late Future<List<Lesson>>? lessons;
+  late Future<List<Dish>>? dishes;
+  late String restaurantId = "tp";
 
   @override
   void initState() {
@@ -60,6 +63,7 @@ class NavigationState extends State<Navigation> {
     setState(() {
       lessons = fetchLessons(week, now.year);
       exams = fetchExams(week, now.year);
+      dishes = fetchDishes(DateTime.now().weekday);
     });
   }
 
@@ -102,7 +106,12 @@ class NavigationState extends State<Navigation> {
                 alignment: Alignment.center,
                 child: const Text('Page 1'),
               ),
-              Home(futureLessons: lessons, futureExams: exams),
+              Home(
+                futureLessons: lessons,
+                futureExams: exams,
+                restaurantId: restaurantId,
+                futureDishes: dishes,
+              ),
               Schedule(
                 futureLessons: lessons,
                 refresh: refreshLessons,
@@ -127,6 +136,7 @@ class NavigationState extends State<Navigation> {
         setState(() {
           lessons = fetchLessons(week, now.year);
           exams = fetchExams(week, now.year);
+          dishes = fetchDishes(DateTime.now().weekday);
         });
       }
     });
@@ -199,6 +209,45 @@ class NavigationState extends State<Navigation> {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to load Lesson');
+    }
+  }
+
+  Future<List<Dish>> fetchDishes(int day,
+      {Restaurants restaurant = Restaurants.traffpunkten}) async {
+    String id;
+    switch (restaurant) {
+      case Restaurants.hojden:
+        id = "rh";
+        break;
+      case Restaurants.aran:
+        id = "ra";
+        break;
+      default:
+        id = "tp";
+    }
+
+    setState(() {
+      restaurantId = id;
+    });
+
+    final response =
+        await http.get(Uri.https('gtg.seabird.digital', "/api/schedule/food", {
+      "restaurant": id,
+    }));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body)["data"];
+
+      List<FoodData> days = [];
+      for (var i = 0; i < data.length; i++) {
+        days.add(FoodData.fromJson(data[i], id));
+      }
+
+      return days[day].dishes;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load Food schedule');
     }
   }
 }

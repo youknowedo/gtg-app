@@ -7,7 +7,7 @@ type RequestData = {
     restaurant: Restaurant;
 };
 
-type Restaurant = "tp" | "hp" | "ra";
+type Restaurant = "tp" | "rh" | "ra";
 
 type FoodData = {
     date: Date;
@@ -34,7 +34,7 @@ const dishes = async (req: NextApiRequest, res: ApiResponse<FoodData[]>) => {
         let restaurant;
         if (
             req.query.restaurant == "tp" ||
-            req.query.restaurant == "hp" ||
+            req.query.restaurant == "rh" ||
             req.query.restaurant == "ra"
         )
             restaurant = req.query.restaurant as Restaurant;
@@ -42,7 +42,7 @@ const dishes = async (req: NextApiRequest, res: ApiResponse<FoodData[]>) => {
             res.status(422).json({
                 error: Errors.MissingParameter(
                     "restaurant",
-                    "'tp' | 'hp' | 'ra'"
+                    "'tp' | 'rh' | 'ra'"
                 ),
             });
 
@@ -71,7 +71,6 @@ const dishes = async (req: NextApiRequest, res: ApiResponse<FoodData[]>) => {
             const ds = $(d).find("> p:not(.eng-meny)").toArray();
             for (const dish of ds) {
                 const texts = $(dish).text();
-                console.log(texts);
 
                 const type = (nordrestTypeExp.exec(texts) || [""])[0].trim();
                 const name = (nordrestNameExp.exec(texts) || [""])[0];
