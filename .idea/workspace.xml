@@ -5,21 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5801dd28-229f-49d0-8543-4ec79866ce91" name="Changes" comment="Stylish">
-      <change afterPath="$PROJECT_DIR$/app/classesSlice.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/components/Home/Events.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/components/Home/Food.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/components/Home/Schedule.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/components/Layout.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/eas.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/lessonsSlice.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/screens/Settings.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/store.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/Cat.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/screens/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/screens/Home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,23 +40,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/sigfridwade/Documents/GitHub/gtg-app/app",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "rearrange.code.on.save": "true",
-    "settings.editor.selected.configurable": "reference.idesettings.emmet.jsx",
-    "ts.external.directory.path": "/Users/sigfridwade/Documents/GitHub/gtg-app/app/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/sigfridwade/Documents/GitHub/gtg-app/app&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;rearrange.code.on.save&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.idesettings.emmet.jsx&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/sigfridwade/Documents/GitHub/gtg-app/app/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/app" />
