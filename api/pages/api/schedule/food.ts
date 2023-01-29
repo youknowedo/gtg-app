@@ -23,9 +23,9 @@ type Dish = {
 };
 
 const nordrestTypeExp = /^[^0-9]+/;
-const nordrestNameExp = /(?<=: ).+$|(?=[(](.|((.,)+.))[)])/;
+const nordrestNameExp = /(?<=: ).+$/;
 const nordrestPriceExp = /[0-9]+/;
-const nordrestAllergiesExp = /(.|((.,)+.))(?=[)]$)/;
+const nordrestAllergiesExp = /[(](.|((.,)+.))[)]$/;
 
 const dishes = async (req: NextApiRequest, res: ApiResponse<FoodData[]>) => {
     if (req.method == "GET") {
@@ -51,9 +51,23 @@ const dishes = async (req: NextApiRequest, res: ApiResponse<FoodData[]>) => {
 
         const data: RequestData = { restaurant };
 
-        const schedule = await fetch(
-            "https://volvo-cars.nordrest.se/traffpunkten/"
-        );
+        let url;
+        switch (data.restaurant) {
+            case "ra":
+                res.status(501).json({
+                    error: Errors.NotImplemented(
+                        "Restaurant Äran does not currently have an online menu."
+                    ),
+                });
+                return;
+            case "rh":
+                url = "https://volvo-cars.nordrest.se/hojden/";
+                break;
+            default:
+                url = "https://volvo-cars.nordrest.se/traffpunkten/";
+        }
+
+        const schedule = await fetch(url);
         const $ = load(await schedule.text());
 
         let foodData: FoodData[] = [];
@@ -73,9 +87,13 @@ const dishes = async (req: NextApiRequest, res: ApiResponse<FoodData[]>) => {
                 const texts = $(dish).text();
 
                 const type = (nordrestTypeExp.exec(texts) || [""])[0].trim();
-                const name = (nordrestNameExp.exec(texts) || [""])[0];
+                const name = (nordrestNameExp.exec(texts) || [""])[0].replace(
+                    nordrestAllergiesExp,
+                    ""
+                );
                 const price = (nordrestPriceExp.exec(texts) || [""])[0];
-                const allergies = (nordrestAllergiesExp.exec(texts) || [""])[0];
+                let allergies = (nordrestAllergiesExp.exec(texts) || [""])[0];
+                allergies = allergies.substring(1, allergies.length - 1);
 
                 dishes.push({
                     type,

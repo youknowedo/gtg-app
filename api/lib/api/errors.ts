@@ -19,6 +19,13 @@ namespace Errors {
             }`,
         };
     };
+
+    export const NotImplemented = (message?: string): RError => {
+        return {
+            code: "GA-E501",
+            message: `Not Implemented. ${message && "Message: " + message}`,
+        };
+    };
 }
 
 export default Errors;
