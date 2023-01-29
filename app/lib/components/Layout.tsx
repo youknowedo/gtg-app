@@ -21,7 +21,7 @@ const Layout = ({
             dispatch,
             classes,
             selectedIndex,
-            classes?.[selectedIndex].groupGuid
+            classes?.[selectedIndex]?.groupGuid
         );
     }, []);
 

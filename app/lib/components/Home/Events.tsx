@@ -49,7 +49,7 @@ const Events = ({ screenProps }: EventsProps) => {
             `?class=${
                 store.getState().classes.classes?.[
                     store.getState().classes.selectedIndex
-                ].groupName
+                ]?.groupName
             }` +
             `&week=${weekNumber}`;
         console.log(url);

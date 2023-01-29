@@ -27,7 +27,9 @@ export const getLessons = async (
 
     const url =
         "https://gtg.seabird.digital/api/schedule/lessons?" +
-        `selectionGuid=${selectionGuid ?? classes?.[selectedIndex].groupGuid}` +
+        `selectionGuid=${
+            selectionGuid ?? classes?.[selectedIndex]?.groupGuid
+        }` +
         `&week=${weekNumber - 1}` +
         `&day=${days % 7}` +
         `&year=2023`;
