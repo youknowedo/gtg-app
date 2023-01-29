@@ -1,51 +1,54 @@
 import * as eva from "@eva-design/eva";
-import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
+import { ApplicationProvider, BottomNavigation, BottomNavigationTab, Icon, IconRegistry } from "@ui-kitten/components";
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
 
+import Layout from "./components/Layout";
 import { HomeScreen } from "./screens/Home";
 import ScheduleScreen from "./screens/Schedule";
+import { Provider } from "react-redux";
+import store from "./store";
+import React from "react";
+import { SafeAreaView } from "react-native";
+import SettingsScreen from "./screens/Settings";
 
 const Tab = createBottomTabNavigator();
 
-export type RootStackParamList = {
-	Home: undefined;
-};
+const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
+	<SafeAreaView>
+		<BottomNavigation
+			style={ {
+				paddingVertical: 12
+			} }
+			selectedIndex={ state.index }
+			onSelect={ index => navigation.navigate(state.routeNames[index]) }>
+			<BottomNavigationTab title="ÖVERSIKT" icon={ <Icon name={ "compass-outline" }/> }/>
+			<BottomNavigationTab title="SCHEMA" icon={ <Icon name={ "menu-2-outline" }/> }/>
+			<BottomNavigationTab title="SCHEMA" icon={ <Icon name={ "settings-outline" }/> }/>
+		</BottomNavigation>
+	</SafeAreaView>
+);
 
 function App() {
+
 	return (
-		<>
+		<Provider store={ store }>
 			<IconRegistry icons={ EvaIconsPack }/>
 			<ApplicationProvider { ...eva } theme={ eva.light }>
 				<NavigationContainer>
-					<Tab.Navigator
-						screenOptions={ ({ route }) => ({
-							tabBarIcon: ({ focused, color, size }) => {
-								let iconName = "";
-
-								if (route.name === "Home") {
-									iconName = focused
-										? "ios-information-circle"
-										: "ios-information-circle-outline";
-								} else if (route.name === "Settings") {
-									iconName = focused ? "ios-list" : "ios-list-outline";
-								}
-
-								// You can return any component that you like here!
-								return <Ionicons name={ iconName as any } size={ size } color={ color }/>;
-							},
-							tabBarActiveTintColor: "tomato",
-							tabBarInactiveTintColor: "gray",
-						}) }
-					>
-						<Tab.Screen name="Home" component={ HomeScreen }/>
-						<Tab.Screen name="Schedule" component={ ScheduleScreen }/>
-					</Tab.Navigator>
+					<Layout>
+						<Tab.Navigator screenOptions={ { headerShown: false } }
+						               tabBar={ props => <BottomTabBar { ...props } /> }>
+							<Tab.Screen name="Home" component={ HomeScreen }/>
+							<Tab.Screen name="Schema" component={ ScheduleScreen }/>
+							<Tab.Screen name="Installningar" component={ SettingsScreen }/>
+						</Tab.Navigator>
+					</Layout>
 				</NavigationContainer>
-			</ApplicationProvider></>
+			</ApplicationProvider>
+		</Provider>
 	);
 }
 
