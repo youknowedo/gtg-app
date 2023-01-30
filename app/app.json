@@ -34,8 +34,6 @@
                 "projectId": "907b3781-30b7-4094-9fee-981c2d4d0e71"
             }
         },
-        "runtimeVersion": {
-            "policy": "exposdk:47.0.0"
-        }
+        "runtimeVersion":  "exposdk:47.0.0"
     }
 }
