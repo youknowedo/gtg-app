@@ -48,6 +48,7 @@ const classesSlice = createSlice({
                 }
 
                 if (!foundBlock) state.nextBlockIndex = undefined;
+                console.log("foundblock" + state.nextBlockIndex);
             }
         },
         setLoadingLessons: (state, loadingLessons: PayloadAction<boolean>) => {

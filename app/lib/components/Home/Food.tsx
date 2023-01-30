@@ -39,6 +39,7 @@ const Food = () => {
 
         if (!response.ok) {
             setError(true);
+            setLoading(false);
 
             return;
         }

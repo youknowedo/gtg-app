@@ -42,7 +42,7 @@ const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
                 icon={<Icon name={"menu-2-outline"} />}
             />
             <BottomNavigationTab
-                title="SCHEMA"
+                title="INSTÄLLNINGAR"
                 icon={<Icon name={"settings-outline"} />}
             />
         </BottomNavigation>

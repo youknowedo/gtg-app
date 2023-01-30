@@ -9,6 +9,7 @@ import {
 import React, { useEffect } from "react";
 import { View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { getLessons } from "../lib/fetchers/lessons";
 import { setSelectedClass } from "../lib/redux/classesSlice";
 import { RootState } from "../store";
 
@@ -51,6 +52,12 @@ const SettingsScreen = () => {
                 value={classes?.[selectedIndex]?.groupName}
                 onSelect={(index) => {
                     dispatch(setSelectedClass((index as IndexPath).row));
+                    getLessons(
+                        dispatch,
+                        classes,
+                        (index as IndexPath).row,
+                        classes?.[(index as IndexPath).row].groupGuid
+                    );
                 }}
             >
                 {classes?.map((c) => {

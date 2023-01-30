@@ -45,6 +45,7 @@ export const getLessons = async (
     }
 
     const json = await response?.json();
+    console.log(url + " = " + JSON.stringify(json));
     const data = json.data as Lesson[][];
 
     dispatch(setLessons(data));
