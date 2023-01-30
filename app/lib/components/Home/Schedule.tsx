@@ -15,9 +15,6 @@ const Schedule = ({ screenProps }: ScheduleProps) => {
         (state: RootState) => state.lessons
     );
 
-    console.log("lesssons" + lessons);
-    console.log("lesssonsb" + nextBlockIndex);
-
     return (
         <>
             <Pressable
@@ -44,16 +41,16 @@ const Schedule = ({ screenProps }: ScheduleProps) => {
                     <View style={{ alignItems: "center" }}>
                         <Spinner />
                     </View>
-                ) : lessons && nextBlockIndex != undefined ? (
+                ) : lessons && true ? (
                     <View>
                         <Text style={{ marginBottom: 4 }} category={"c1"}>
-                            {lessons[nextBlockIndex].length > 1
+                            {lessons[0].length > 1
                                 ? "Nästa block:"
                                 : "Nästa lektion:"}
                         </Text>
-                        {lessons[nextBlockIndex].map((l) => {
-                            l.from = new Date(l.from);
-                            l.to = new Date(l.to);
+                        {lessons[0].map((l) => {
+                            l.from = l.from;
+                            l.to = l.to;
 
                             return (
                                 <Card
@@ -76,23 +73,17 @@ const Schedule = ({ screenProps }: ScheduleProps) => {
                                     >
                                         <Text category={"s1"}>{l?.name}</Text>
                                         <Text category={"p1"}>
-                                            {new Date(l.from).toLocaleString(
-                                                undefined,
-                                                {
-                                                    hour: "2-digit",
-                                                    minute: "numeric",
-                                                    hourCycle: "h24",
-                                                }
-                                            )}{" "}
+                                            {l.from.toLocaleString(undefined, {
+                                                hour: "2-digit",
+                                                minute: "numeric",
+                                                hourCycle: "h24",
+                                            })}{" "}
                                             -{" "}
-                                            {new Date(l.to).toLocaleString(
-                                                undefined,
-                                                {
-                                                    hour: "2-digit",
-                                                    minute: "numeric",
-                                                    hourCycle: "h24",
-                                                }
-                                            )}
+                                            {l.to.toLocaleString(undefined, {
+                                                hour: "2-digit",
+                                                minute: "numeric",
+                                                hourCycle: "h24",
+                                            })}
                                         </Text>
                                     </View>
                                     <Text category={"s1"} appearance={"hint"}>

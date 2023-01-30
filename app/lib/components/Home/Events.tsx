@@ -27,7 +27,7 @@ const Events = ({ screenProps }: EventsProps) => {
     const lessons = useSelector((state: RootState) => state.lessons);
 
     const [events, setEvents] = useState<ExamData[] | undefined>();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
     const getEvents = async () => {
@@ -67,6 +67,10 @@ const Events = ({ screenProps }: EventsProps) => {
         const json = JSON.parse(text);
         const data = json.data as ExamData[];
 
+        for (let i = 0; i < data.length; i++) {
+            data[i].date = new Date(data[i].date);
+        }
+
         setEvents(data);
         setLoading(false);
     };
@@ -101,21 +105,31 @@ const Events = ({ screenProps }: EventsProps) => {
                     events.map((day) => {
                         return day.exams.map((e) => {
                             return (
-                                <Card style={{ marginVertical: 4 }}>
+                                <Card
+                                    accent={() => (
+                                        <View
+                                            style={{
+                                                backgroundColor: e.typeColor,
+                                                paddingVertical: 2,
+                                            }}
+                                        />
+                                    )}
+                                    style={{ marginVertical: 4 }}
+                                >
                                     <View
                                         style={{
                                             flexDirection: "row",
                                             justifyContent: "space-between",
                                         }}
                                     >
-                                        <Text category={"s1"}>{e.name}</Text>
+                                        <Text category={"s1"}>
+                                            {(e.type && e.type + ": ") +
+                                                (e.name ?? "")}
+                                        </Text>
                                         <Text category={"p1"}>
-                                            {new Date(day.date).toLocaleString(
-                                                "sv-SE",
-                                                {
-                                                    weekday: "long",
-                                                }
-                                            )}
+                                            {day.date.toLocaleString("sv-SE", {
+                                                weekday: "long",
+                                            })}
                                         </Text>
                                     </View>
                                     <Text category={"s1"} appearance={"hint"}>

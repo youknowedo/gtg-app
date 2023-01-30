@@ -1,7 +1,7 @@
 import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import { Lesson, Skola24Object } from "skola24";
-import { RootState } from "../../store";
+import store, { RootState } from "../../store";
 import {
     setLessons,
     setLoadingLessons,
@@ -14,7 +14,7 @@ export const getLessons = async (
     selectedIndex: number,
     selectionGuid?: string
 ) => {
-    dispatch(setLoadingLessons(true));
+    if (!store.getState().lessons.lessons) dispatch(setLoadingLessons(true));
     dispatch(setLoadingLessonsError(false));
 
     const currentDate = new Date();

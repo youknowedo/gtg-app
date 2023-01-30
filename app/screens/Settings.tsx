@@ -19,10 +19,6 @@ const SettingsScreen = () => {
         (state: RootState) => state.classes
     );
 
-    useEffect(() => {
-        console.log(classes);
-    }, []);
-
     return (
         <Layout
             style={{ paddingHorizontal: 16, paddingVertical: 24 }}

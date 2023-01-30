@@ -26,16 +26,27 @@ const classesSlice = createSlice({
             state.lessons = newState.payload;
 
             if (state.lessons) {
+                for (let i = 0; i < state.lessons.length; i++) {
+                    const day = state.lessons[i];
+
+                    for (let j = 0; j < day.length; j++) {
+                        state.lessons[i][j].from = new Date(
+                            state.lessons[i][j].from
+                        );
+
+                        state.lessons[i][j].to = new Date(
+                            state.lessons[i][j].to
+                        );
+                    }
+                }
+
                 const currentDate = new Date();
 
                 let foundBlock = false;
                 for (let i = 0; i < state.lessons.length; i++) {
                     const block = state.lessons[i];
                     for (const lesson of block) {
-                        if (
-                            new Date(lesson.from).getTime() >
-                            currentDate.getTime()
-                        ) {
+                        if (lesson.from.getTime() > currentDate.getTime()) {
                             foundBlock = true;
                             break;
                         }

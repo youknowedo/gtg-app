@@ -28,9 +28,13 @@ const classesSlice = createSlice({
         ) => {
             state.selectedIndex = selectedClassIndex.payload;
         },
+        setLoadingClasses: (state, classesLessons: PayloadAction<boolean>) => {
+            state.loading = classesLessons.payload;
+        },
     },
 });
 
-export const { setClasses, setSelectedClass } = classesSlice.actions;
+export const { setClasses, setSelectedClass, setLoadingClasses } =
+    classesSlice.actions;
 
 export default classesSlice;
