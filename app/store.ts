@@ -1,28 +1,28 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { AsyncStorage } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persistReducer } from "redux-persist";
 import persistStore from "redux-persist/lib/persistStore";
 import classesSlice from "./lib/redux/classesSlice";
 import eventsSlice from "./lib/redux/eventsSlice";
 import foodsSlice from "./lib/redux/foodsSlice";
 import lessonsSlice from "./lib/redux/lessonsSlice";
+import schoolYearSlice from "./lib/redux/schoolYearSlice";
 
 const persistConfig = {
     key: "root",
     storage: AsyncStorage,
 };
 
-const classesReducer = persistReducer(persistConfig, classesSlice.reducer);
-const lessonsReducer = persistReducer(persistConfig, lessonsSlice.reducer);
-const eventsReducer = persistReducer(persistConfig, eventsSlice.reducer);
-const foodsReducer = persistReducer(persistConfig, foodsSlice.reducer);
-
-const rootReducer = combineReducers({
-    classes: classesReducer,
-    lessons: lessonsReducer,
-    events: eventsReducer,
-    foods: foodsReducer,
-});
+const rootReducer = persistReducer(
+    persistConfig,
+    combineReducers({
+        classes: classesSlice.reducer,
+        lessons: lessonsSlice.reducer,
+        events: eventsSlice.reducer,
+        foods: foodsSlice.reducer,
+        schoolYear: schoolYearSlice.reducer,
+    })
+);
 
 export type RootState = ReturnType<typeof rootReducer>;
 
