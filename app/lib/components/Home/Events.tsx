@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Card, Icon, Spinner, Text } from "@ui-kitten/components";
+import { Card, Spinner, Text } from "@ui-kitten/components";
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,10 +29,6 @@ const Events = ({ screenProps }: EventsProps) => {
                 }}
             >
                 <Text category={"h6"}>Händelser</Text>
-                <Icon
-                    style={{ width: 28, height: 28 }}
-                    name="arrow-ios-forward-outline"
-                />
             </View>
             <View>
                 {loading || lessons.loading ? (

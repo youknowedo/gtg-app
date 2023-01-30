@@ -27,13 +27,14 @@
             }
         },
         "web": {
-            "favicon": "./assets/favicon.png"
+            "favicon": "./assets/favicon.png",
+            "build": { "babel": { "include": ["@ui-kitten/components"] } }
         },
         "extra": {
             "eas": {
                 "projectId": "907b3781-30b7-4094-9fee-981c2d4d0e71"
             }
         },
-        "runtimeVersion":  "exposdk:47.0.0"
+        "runtimeVersion": "exposdk:47.0.0"
     }
 }

@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Card, Icon, Spinner, Text } from "@ui-kitten/components";
+import { Card, Spinner, Text } from "@ui-kitten/components";
 import React from "react";
 import { Pressable, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,10 +30,6 @@ const Schedule = ({ screenProps }: ScheduleProps) => {
                     }}
                 >
                     <Text category={"h6"}>Schema</Text>
-                    <Icon
-                        style={{ width: 28, height: 28 }}
-                        name="arrow-ios-forward-outline"
-                    />
                 </View>
             </Pressable>
             <View>

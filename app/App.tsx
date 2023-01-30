@@ -8,10 +8,7 @@ import {
     ApplicationProvider,
     BottomNavigation,
     BottomNavigationTab,
-    Icon,
-    IconRegistry,
 } from "@ui-kitten/components";
-import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
 import React from "react";
 import { SafeAreaView } from "react-native";
@@ -34,18 +31,9 @@ const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
             selectedIndex={state.index}
             onSelect={(index) => navigation.navigate(state.routeNames[index])}
         >
-            <BottomNavigationTab
-                title="ÖVERSIKT"
-                icon={<Icon name={"compass-outline"} />}
-            />
-            <BottomNavigationTab
-                title="SCHEMA"
-                icon={<Icon name={"menu-2-outline"} />}
-            />
-            <BottomNavigationTab
-                title="INSTÄLLNINGAR"
-                icon={<Icon name={"settings-outline"} />}
-            />
+            <BottomNavigationTab title="ÖVERSIKT" />
+            <BottomNavigationTab title="SCHEMA" />
+            <BottomNavigationTab title="INSTÄLLNINGAR" />
         </BottomNavigation>
     </SafeAreaView>
 );
@@ -54,7 +42,6 @@ function App() {
     return (
         <Provider store={store}>
             <PersistGate persistor={persistor}>
-                <IconRegistry icons={EvaIconsPack} />
                 <ApplicationProvider {...eva} theme={eva.light}>
                     <NavigationContainer>
                         <Layout>
