@@ -11,10 +11,11 @@ const persistConfig = {
 };
 
 const classesReducer = persistReducer(persistConfig, classesSlice.reducer);
+const lessonsReducer = persistReducer(persistConfig, lessonsSlice.reducer);
 
 const rootReducer = combineReducers({
     classes: classesReducer,
-    lessons: lessonsSlice.reducer,
+    lessons: lessonsReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
