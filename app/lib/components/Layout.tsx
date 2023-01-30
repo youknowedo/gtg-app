@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { getAll } from "../fetchers";
 import { getClasses } from "../fetchers/classes";
 import { getEvents } from "../fetchers/events";
 import { getLessons } from "../fetchers/lessons";
@@ -17,14 +18,7 @@ const Layout = ({
     );
 
     useEffect(() => {
-        getClasses(dispatch);
-        getLessons(
-            dispatch,
-            classes,
-            selectedIndex,
-            classes?.[selectedIndex]?.groupGuid
-        );
-        getEvents(dispatch);
+        getAll(dispatch);
     }, []);
 
     return (

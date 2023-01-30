@@ -8,8 +8,10 @@ import Food from "../lib/components/Home/Food";
 import Schedule from "../lib/components/Home/Schedule";
 import { getClasses } from "../lib/fetchers/classes";
 import { getEvents } from "../lib/fetchers/events";
+import { getFoods } from "../lib/fetchers/foods";
 import { getLessons } from "../lib/fetchers/lessons";
 import { setLoadingClasses } from "../lib/redux/classesSlice";
+import { setFoods } from "../lib/redux/foodsSlice";
 import { setLoadingLessons } from "../lib/redux/lessonsSlice";
 import { RootState } from "../store";
 
@@ -18,18 +20,27 @@ export const HomeScreen = (props: NativeStackScreenProps<any, "Home">) => {
     const { classes, selectedIndex, loading } = useSelector(
         (state: RootState) => state.classes
     );
-    const lessons = useSelector((state: RootState) => state.lessons);
+    const { selectedRestaurantIndex } = useSelector(
+        (state: RootState) => state.foods
+    );
 
     const [refreshing, setRefreshing] = React.useState(0);
 
     const onRefresh = React.useCallback(() => {
-        setRefreshing(3);
+        setRefreshing(4);
 
         getClasses(dispatch).then(() => setRefreshing(refreshing - 1));
+
         getLessons(dispatch, classes, selectedIndex).then(() =>
             setRefreshing(refreshing - 1)
         );
+
         getEvents(dispatch).then(() => {
+            setRefreshing(refreshing - 1);
+        });
+
+        dispatch(setFoods(undefined));
+        getFoods(dispatch, selectedRestaurantIndex).then(() => {
             setRefreshing(refreshing - 1);
         });
     }, []);

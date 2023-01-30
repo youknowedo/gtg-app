@@ -9,7 +9,7 @@ import {
 } from "../redux/eventsSlice";
 
 export const getEvents = async (dispatch: Dispatch<AnyAction>) => {
-    if (!store.getState().lessons.lessons) dispatch(setLoadingEvents(true));
+    if (!store.getState().events.events) dispatch(setLoadingEvents(true));
     dispatch(setEventsLoadingError(false));
 
     const currentDate = new Date();

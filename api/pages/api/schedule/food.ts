@@ -7,7 +7,7 @@ type RequestData = {
     restaurant: Restaurant;
 };
 
-type Restaurant = "tp" | "rh" | "ra";
+export type Restaurant = "tp" | "rh" | "ra";
 
 export type FoodData = {
     date: Date;
