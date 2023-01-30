@@ -16,11 +16,12 @@ import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import React from "react";
 import { SafeAreaView } from "react-native";
 import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 import Layout from "./lib/components/Layout";
 import { HomeScreen } from "./screens/Home";
 import ScheduleScreen from "./screens/Schedule";
 import SettingsScreen from "./screens/Settings";
-import store from "./store";
+import store, { persistor } from "./store";
 
 const Tab = createBottomTabNavigator();
 
@@ -52,27 +53,32 @@ const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
 function App() {
     return (
         <Provider store={store}>
-            <IconRegistry icons={EvaIconsPack} />
-            <ApplicationProvider {...eva} theme={eva.light}>
-                <NavigationContainer>
-                    <Layout>
-                        <Tab.Navigator
-                            screenOptions={{ headerShown: false }}
-                            tabBar={(props) => <BottomTabBar {...props} />}
-                        >
-                            <Tab.Screen name="Home" component={HomeScreen} />
-                            <Tab.Screen
-                                name="Schema"
-                                component={ScheduleScreen}
-                            />
-                            <Tab.Screen
-                                name="Installningar"
-                                component={SettingsScreen}
-                            />
-                        </Tab.Navigator>
-                    </Layout>
-                </NavigationContainer>
-            </ApplicationProvider>
+            <PersistGate persistor={persistor}>
+                <IconRegistry icons={EvaIconsPack} />
+                <ApplicationProvider {...eva} theme={eva.light}>
+                    <NavigationContainer>
+                        <Layout>
+                            <Tab.Navigator
+                                screenOptions={{ headerShown: false }}
+                                tabBar={(props) => <BottomTabBar {...props} />}
+                            >
+                                <Tab.Screen
+                                    name="Home"
+                                    component={HomeScreen}
+                                />
+                                <Tab.Screen
+                                    name="Schema"
+                                    component={ScheduleScreen}
+                                />
+                                <Tab.Screen
+                                    name="Installningar"
+                                    component={SettingsScreen}
+                                />
+                            </Tab.Navigator>
+                        </Layout>
+                    </NavigationContainer>
+                </ApplicationProvider>
+            </PersistGate>
         </Provider>
     );
 }
