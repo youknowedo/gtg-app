@@ -32,7 +32,8 @@
     "react-native-web": "~0.18.7",
     "react-redux": "^8.0.5",
     "redux-persist": "^6.0.0",
-    "skola24": "^1.1.5"
+    "skola24": "^1.1.5",
+    "web": "file:../api"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",

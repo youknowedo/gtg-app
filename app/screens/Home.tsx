@@ -7,6 +7,7 @@ import Events from "../lib/components/Home/Events";
 import Food from "../lib/components/Home/Food";
 import Schedule from "../lib/components/Home/Schedule";
 import { getClasses } from "../lib/fetchers/classes";
+import { getEvents } from "../lib/fetchers/events";
 import { getLessons } from "../lib/fetchers/lessons";
 import { setLoadingClasses } from "../lib/redux/classesSlice";
 import { setLoadingLessons } from "../lib/redux/lessonsSlice";
@@ -22,12 +23,15 @@ export const HomeScreen = (props: NativeStackScreenProps<any, "Home">) => {
     const [refreshing, setRefreshing] = React.useState(0);
 
     const onRefresh = React.useCallback(() => {
-        setRefreshing(2);
+        setRefreshing(3);
 
         getClasses(dispatch).then(() => setRefreshing(refreshing - 1));
         getLessons(dispatch, classes, selectedIndex).then(() =>
             setRefreshing(refreshing - 1)
         );
+        getEvents(dispatch).then(() => {
+            setRefreshing(refreshing - 1);
+        });
     }, []);
 
     return (

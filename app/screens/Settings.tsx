@@ -9,6 +9,7 @@ import {
 import React, { useEffect } from "react";
 import { View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { getEvents } from "../lib/fetchers/events";
 import { getLessons } from "../lib/fetchers/lessons";
 import { setSelectedClass } from "../lib/redux/classesSlice";
 import { RootState } from "../store";
@@ -54,6 +55,7 @@ const SettingsScreen = () => {
                         (index as IndexPath).row,
                         classes?.[(index as IndexPath).row].groupGuid
                     );
+                    getEvents(dispatch);
                 }}
             >
                 {classes?.map((c) => {

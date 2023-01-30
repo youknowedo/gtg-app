@@ -3,6 +3,7 @@ import { AsyncStorage } from "react-native";
 import { persistReducer } from "redux-persist";
 import persistStore from "redux-persist/lib/persistStore";
 import classesSlice from "./lib/redux/classesSlice";
+import eventsSlice from "./lib/redux/eventsSlice";
 import lessonsSlice from "./lib/redux/lessonsSlice";
 
 const persistConfig = {
@@ -12,10 +13,12 @@ const persistConfig = {
 
 const classesReducer = persistReducer(persistConfig, classesSlice.reducer);
 const lessonsReducer = persistReducer(persistConfig, lessonsSlice.reducer);
+const eventsReducer = persistReducer(persistConfig, eventsSlice.reducer);
 
 const rootReducer = combineReducers({
     classes: classesReducer,
     lessons: lessonsReducer,
+    events: eventsReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

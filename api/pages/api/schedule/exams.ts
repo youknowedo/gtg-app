@@ -12,12 +12,12 @@ type RequestData = {
     year: number;
 };
 
-type ExamData = {
+export type ExamData = {
     date: Date;
     exams: Exam[];
 };
 
-type Exam = {
+export type Exam = {
     type?: string;
     typeColor?: string;
     name?: string;

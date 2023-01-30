@@ -9,12 +9,12 @@ type RequestData = {
 
 type Restaurant = "tp" | "rh" | "ra";
 
-type FoodData = {
+export type FoodData = {
     date: Date;
     dishes: Dish[];
 };
 
-type Dish = {
+export type Dish = {
     type?: string;
     name?: string;
 

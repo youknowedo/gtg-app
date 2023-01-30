@@ -2,22 +2,10 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Card, Icon, Spinner, Text } from "@ui-kitten/components";
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { ExamData } from "web/pages/api/schedule/exams";
 import store, { RootState } from "../../../store";
-
-type ExamData = {
-    date: Date;
-    exams: Exam[];
-};
-
-type Exam = {
-    type?: string;
-    typeColor?: string;
-    name?: string;
-    teacher?: string;
-
-    registered?: Date;
-};
+import { setEvents } from "../../redux/eventsSlice";
 
 type EventsProps = {
     screenProps: NativeStackScreenProps<any, "Home">;
@@ -25,59 +13,9 @@ type EventsProps = {
 
 const Events = ({ screenProps }: EventsProps) => {
     const lessons = useSelector((state: RootState) => state.lessons);
-
-    const [events, setEvents] = useState<ExamData[] | undefined>();
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
-
-    const getEvents = async () => {
-        setEvents(undefined);
-        setLoading(true);
-        setError(false);
-
-        const currentDate = new Date();
-        const startDate = new Date(currentDate.getFullYear(), 0, 1);
-        const days = Math.floor(
-            (currentDate.valueOf() - startDate.valueOf()) /
-                (24 * 60 * 60 * 1000)
-        );
-
-        const weekNumber = Math.ceil(days / 7);
-
-        const url =
-            "https://gtg.seabird.digital/api/schedule/exams" +
-            `?class=${
-                store.getState().classes.classes?.[
-                    store.getState().classes.selectedIndex
-                ]?.groupName
-            }` +
-            `&week=${weekNumber}`;
-        console.log(url);
-        const response = await fetch(url);
-
-        if (!response.ok) {
-            setError(true);
-            setLoading(false);
-
-            return;
-        }
-
-        const text = await response.text();
-        console.log(url + " = " + text);
-        const json = JSON.parse(text);
-        const data = json.data as ExamData[];
-
-        for (let i = 0; i < data.length; i++) {
-            data[i].date = new Date(data[i].date);
-        }
-
-        setEvents(data);
-        setLoading(false);
-    };
-
-    useEffect(() => {
-        store.subscribe(getEvents);
-    }, []);
+    const { events, loading, error } = useSelector(
+        (state: RootState) => state.events
+    );
 
     return (
         <>

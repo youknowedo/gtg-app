@@ -3,6 +3,7 @@ import { SafeAreaView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { getClasses } from "../fetchers/classes";
+import { getEvents } from "../fetchers/events";
 import { getLessons } from "../fetchers/lessons";
 
 const Layout = ({
@@ -16,13 +17,14 @@ const Layout = ({
     );
 
     useEffect(() => {
-        getClasses(dispatch).then(() => {});
+        getClasses(dispatch);
         getLessons(
             dispatch,
             classes,
             selectedIndex,
             classes?.[selectedIndex]?.groupGuid
         );
+        getEvents(dispatch);
     }, []);
 
     return (
