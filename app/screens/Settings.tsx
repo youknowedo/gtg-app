@@ -1,4 +1,5 @@
 import {
+    Icon,
     IndexPath,
     Layout,
     Select,
@@ -38,6 +39,10 @@ const SettingsScreen = () => {
                 }}
             >
                 <Text category={"h6"}>Klass</Text>
+                <Icon
+                    style={{ width: 28, height: 28 }}
+                    name="arrow-ios-forward-outline"
+                />
             </View>
             <Select
                 selectedIndex={new IndexPath(selectedIndex)}

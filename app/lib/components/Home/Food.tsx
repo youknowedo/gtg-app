@@ -1,4 +1,4 @@
-import { Card, Spinner, Tab, TabBar, Text } from "@ui-kitten/components";
+import { Card, Icon, Spinner, Tab, TabBar, Text } from "@ui-kitten/components";
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,6 +43,10 @@ const Food = () => {
                 }}
             >
                 <Text category={"h6"}>Mat</Text>
+                <Icon
+                    style={{ width: 28, height: 28 }}
+                    name="arrow-ios-forward-outline"
+                />
             </View>
 
             <Card>
