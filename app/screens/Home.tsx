@@ -17,9 +17,11 @@ import { RootState } from "../store";
 
 export const HomeScreen = (props: NativeStackScreenProps<any, "Home">) => {
     const dispatch = useDispatch();
-    const { classes, selectedIndex, loading } = useSelector(
-        (state: RootState) => state.classes
-    );
+    const {
+        classes,
+        selectedClassIndex: selectedIndex,
+        loading,
+    } = useSelector((state: RootState) => state.classes);
     const { selectedRestaurantIndex } = useSelector(
         (state: RootState) => state.foods
     );

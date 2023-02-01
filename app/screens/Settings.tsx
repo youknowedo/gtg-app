@@ -6,19 +6,28 @@ import {
     SelectItem,
     Text,
 } from "@ui-kitten/components";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { getClasses } from "../lib/fetchers/classes";
 import { getEvents } from "../lib/fetchers/events";
 import { getLessons } from "../lib/fetchers/lessons";
 import { setSelectedClass } from "../lib/redux/classesSlice";
-import { RootState } from "../store";
+import { setEvents, setLoadingEvents } from "../lib/redux/eventsSlice";
+import { setLessons, setLoadingLessons } from "../lib/redux/lessonsSlice";
+import { persistor, RootState } from "../store";
 
 const SettingsScreen = () => {
     const dispatch = useDispatch();
-    const { classes, selectedIndex } = useSelector(
+    const { classes, selectedClassIndex: selectedIndex } = useSelector(
         (state: RootState) => state.classes
     );
+    const c = useSelector((state: RootState) => state.classes);
+
+    useEffect(() => {
+        console.log("inexus" + JSON.stringify(c.selectedClassIndex));
+        getClasses(dispatch);
+    }, []);
 
     return (
         <Layout
@@ -49,13 +58,8 @@ const SettingsScreen = () => {
                 value={classes?.[selectedIndex]?.groupName}
                 onSelect={(index) => {
                     dispatch(setSelectedClass((index as IndexPath).row));
-                    getLessons(
-                        dispatch,
-                        classes,
-                        (index as IndexPath).row,
-                        classes?.[(index as IndexPath).row].groupGuid
-                    );
-                    getEvents(dispatch);
+
+                    persistor.persist();
                 }}
             >
                 {classes?.map((c) => {

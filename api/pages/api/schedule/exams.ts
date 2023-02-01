@@ -13,7 +13,7 @@ type RequestData = {
 };
 
 export type ExamData = {
-    date: Date;
+    date: string;
     exams: Exam[];
 };
 
@@ -23,7 +23,7 @@ export type Exam = {
     name?: string;
     teacher?: string;
 
-    registered?: Date;
+    registered?: string;
 };
 
 const exams = async (req: NextApiRequest, res: ApiResponse<ExamData[]>) => {
@@ -162,7 +162,7 @@ const exams = async (req: NextApiRequest, res: ApiResponse<ExamData[]>) => {
                 ) {
                     e.registered = new Date(
                         $($(ts).get(i)).text().trim().substring(22)
-                    );
+                    ).toISOString();
 
                     do i++;
                     while (
@@ -176,7 +176,7 @@ const exams = async (req: NextApiRequest, res: ApiResponse<ExamData[]>) => {
 
             if (exams.length > 0)
                 examData.push({
-                    date: new Date(date),
+                    date: date.toISOString(),
                     exams,
                 });
         }
@@ -188,8 +188,8 @@ const exams = async (req: NextApiRequest, res: ApiResponse<ExamData[]>) => {
             for (const day of examData) {
                 console.log(day.date);
                 if (
-                    day.date >= new Date(data.year, 0, days + 1) &&
-                    day.date <= new Date(data.year, 0, days + 7)
+                    new Date(day.date) >= new Date(data.year, 0, days + 1) &&
+                    new Date(day.date) <= new Date(data.year, 0, days + 7)
                 )
                     filteredExamData.push(day);
             }

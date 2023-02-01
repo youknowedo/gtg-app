@@ -7,6 +7,16 @@ import { ExamData } from "web/pages/api/schedule/exams";
 import store, { RootState } from "../../../store";
 import { setEvents } from "../../redux/eventsSlice";
 
+const weekdays = [
+    "måndag",
+    "tisdag",
+    "onsdag",
+    "torsdag",
+    "fredag",
+    "lördag",
+    "söndag",
+];
+
 type EventsProps = {
     screenProps: NativeStackScreenProps<any, "Home">;
 };
@@ -65,9 +75,11 @@ const Events = ({ screenProps }: EventsProps) => {
                                                 (e.name ?? "")}
                                         </Text>
                                         <Text category={"p1"}>
-                                            {day.date.toLocaleString("sv-SE", {
-                                                weekday: "long",
-                                            })}
+                                            {
+                                                weekdays[
+                                                    new Date(day.date).getDay()
+                                                ]
+                                            }
                                         </Text>
                                     </View>
                                     <Text category={"s1"} appearance={"hint"}>

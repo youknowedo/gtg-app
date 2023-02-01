@@ -10,7 +10,7 @@ type RequestData = {
 export type Restaurant = "tp" | "rh" | "ra";
 
 export type FoodData = {
-    date: Date;
+    date: string;
     dishes: Dish[];
 };
 
@@ -104,7 +104,7 @@ const dishes = async (req: NextApiRequest, res: ApiResponse<FoodData[]>) => {
             }
 
             foodData.push({
-                date,
+                date: date.toISOString(),
                 dishes,
             });
 

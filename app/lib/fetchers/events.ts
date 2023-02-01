@@ -8,7 +8,10 @@ import {
     setLoadingEvents,
 } from "../redux/eventsSlice";
 
-export const getEvents = async (dispatch: Dispatch<AnyAction>) => {
+export const getEvents = async (
+    dispatch: Dispatch<AnyAction>,
+    selectedClassIndex?: number
+) => {
     if (!store.getState().events.events) dispatch(setLoadingEvents(true));
     dispatch(setEventsLoadingError(false));
 
@@ -24,7 +27,8 @@ export const getEvents = async (dispatch: Dispatch<AnyAction>) => {
         "https://gtg.seabird.digital/api/schedule/exams" +
         `?class=${
             store.getState().classes.classes?.[
-                store.getState().classes.selectedIndex
+                selectedClassIndex ??
+                    store.getState().classes.selectedClassIndex
             ]?.groupName
         }` +
         `&week=${weekNumber}`;
@@ -43,10 +47,6 @@ export const getEvents = async (dispatch: Dispatch<AnyAction>) => {
     console.log(url + " = " + text);
     const json = JSON.parse(text);
     const data = json.data as ExamData[];
-
-    for (let i = 0; i < data.length; i++) {
-        data[i].date = new Date(data[i].date);
-    }
 
     dispatch(setEvents(data));
     dispatch(setLoadingEvents(false));

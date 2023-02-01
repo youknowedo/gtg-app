@@ -44,11 +44,11 @@ const Schedule = ({ screenProps }: ScheduleProps) => {
                 ) : lessons && true ? (
                     <View>
                         <Text style={{ marginBottom: 4 }} category={"c1"}>
-                            {lessons[0].length > 1
+                            {lessons[nextBlockIndex || 0].length > 1
                                 ? "Nästa block:"
                                 : "Nästa lektion:"}
                         </Text>
-                        {lessons[0].map((l) => {
+                        {lessons[nextBlockIndex || 0].map((l) => {
                             l.from = l.from;
                             l.to = l.to;
 
@@ -73,13 +73,17 @@ const Schedule = ({ screenProps }: ScheduleProps) => {
                                     >
                                         <Text category={"s1"}>{l?.name}</Text>
                                         <Text category={"p1"}>
-                                            {l.from.toLocaleString(undefined, {
+                                            {new Date(
+                                                l.from.replace("Z", "")
+                                            ).toLocaleString(undefined, {
                                                 hour: "2-digit",
                                                 minute: "numeric",
                                                 hourCycle: "h24",
                                             })}{" "}
                                             -{" "}
-                                            {l.to.toLocaleString(undefined, {
+                                            {new Date(
+                                                l.to.replace("Z", "")
+                                            ).toLocaleString(undefined, {
                                                 hour: "2-digit",
                                                 minute: "numeric",
                                                 hourCycle: "h24",

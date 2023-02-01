@@ -6,19 +6,6 @@ import { RootState } from "../../../store";
 import { getFoods } from "../../fetchers/foods";
 import { setFoods, setSelectedRestaurant } from "../../redux/foodsSlice";
 
-type FoodData = {
-    date: Date;
-    dishes: Dish[];
-};
-
-type Dish = {
-    type?: string;
-    name?: string;
-
-    price?: number;
-    allergies?: string;
-};
-
 const Food = () => {
     const dispatch = useDispatch();
     const { foods, selectedRestaurantIndex, loading, error } = useSelector(

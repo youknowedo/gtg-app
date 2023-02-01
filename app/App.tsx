@@ -15,40 +15,14 @@ import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
 import React from "react";
 import { SafeAreaView } from "react-native";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import Layout from "./lib/components/Layout";
+import { getAll } from "./lib/fetchers";
 import { HomeScreen } from "./screens/Home";
 import ScheduleScreen from "./screens/Schedule";
 import SettingsScreen from "./screens/Settings";
 import store, { persistor } from "./store";
-
-const Tab = createBottomTabNavigator();
-
-const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
-    <SafeAreaView>
-        <BottomNavigation
-            style={{
-                paddingVertical: 12,
-            }}
-            selectedIndex={state.index}
-            onSelect={(index) => navigation.navigate(state.routeNames[index])}
-        >
-            <BottomNavigationTab
-                title="ÖVERSIKT"
-                icon={<Icon name={"compass-outline"} />}
-            />
-            <BottomNavigationTab
-                title="SCHEMA"
-                icon={<Icon name={"menu-2-outline"} />}
-            />
-            <BottomNavigationTab
-                title="INSTÄLLNINGAR"
-                icon={<Icon name={"settings-outline"} />}
-            />
-        </BottomNavigation>
-    </SafeAreaView>
-);
 
 function App() {
     return (
@@ -57,25 +31,7 @@ function App() {
                 <IconRegistry icons={EvaIconsPack} />
                 <ApplicationProvider {...eva} theme={eva.light}>
                     <NavigationContainer>
-                        <Layout>
-                            <Tab.Navigator
-                                screenOptions={{ headerShown: false }}
-                                tabBar={(props) => <BottomTabBar {...props} />}
-                            >
-                                <Tab.Screen
-                                    name="Home"
-                                    component={HomeScreen}
-                                />
-                                <Tab.Screen
-                                    name="Schema"
-                                    component={ScheduleScreen}
-                                />
-                                <Tab.Screen
-                                    name="Installningar"
-                                    component={SettingsScreen}
-                                />
-                            </Tab.Navigator>
-                        </Layout>
+                        <Layout />
                     </NavigationContainer>
                 </ApplicationProvider>
             </PersistGate>

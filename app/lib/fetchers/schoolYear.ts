@@ -12,7 +12,7 @@ import {
 
 export const getSchoolYear = async (dispatch: Dispatch<AnyAction>) => {
     const oldSchoolYear = useSelector((state: RootState) => state.schoolYear);
-    const { classes, selectedIndex } = useSelector(
+    const { classes, selectedClassIndex: selectedIndex } = useSelector(
         (state: RootState) => state.classes
     );
 

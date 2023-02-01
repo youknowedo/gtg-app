@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ActionSheetIOS } from "react-native";
 import { Lesson } from "skola24";
+import { setClasses } from "./classesSlice";
 
 export type LessonsState = {
     lessons?: Lesson[][];
@@ -32,11 +34,11 @@ const classesSlice = createSlice({
                     for (let j = 0; j < day.length; j++) {
                         state.lessons[i][j].from = new Date(
                             state.lessons[i][j].from
-                        );
+                        ).toISOString();
 
                         state.lessons[i][j].to = new Date(
                             state.lessons[i][j].to
-                        );
+                        ).toISOString();
                     }
                 }
 
@@ -46,7 +48,10 @@ const classesSlice = createSlice({
                 for (let i = 0; i < state.lessons.length; i++) {
                     const block = state.lessons[i];
                     for (const lesson of block) {
-                        if (lesson.from.getTime() > currentDate.getTime()) {
+                        if (
+                            new Date(lesson.from).getTime() >
+                            currentDate.getTime()
+                        ) {
                             foundBlock = true;
                             break;
                         }

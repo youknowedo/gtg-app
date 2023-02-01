@@ -3,14 +3,14 @@ import { Skola24Object } from "skola24";
 
 export type ClassesState = {
     classes?: Skola24Object[];
-    selectedIndex: number;
+    selectedClassIndex: number;
     loading: boolean;
     error: boolean;
 };
 
 const initialState: ClassesState = {
     classes: [],
-    selectedIndex: 0,
+    selectedClassIndex: 14,
     loading: false,
     error: false,
 };
@@ -26,15 +26,25 @@ const classesSlice = createSlice({
             state,
             selectedClassIndex: PayloadAction<number>
         ) => {
-            state.selectedIndex = selectedClassIndex.payload;
+            state.selectedClassIndex = selectedClassIndex.payload;
         },
         setLoadingClasses: (state, classesLessons: PayloadAction<boolean>) => {
             state.loading = classesLessons.payload;
         },
+        setClassesLoadingError: (
+            state,
+            classesLoadingError: PayloadAction<boolean>
+        ) => {
+            state.error = classesLoadingError.payload;
+        },
     },
 });
 
-export const { setClasses, setSelectedClass, setLoadingClasses } =
-    classesSlice.actions;
+export const {
+    setClasses,
+    setSelectedClass,
+    setLoadingClasses,
+    setClassesLoadingError,
+} = classesSlice.actions;
 
 export default classesSlice;

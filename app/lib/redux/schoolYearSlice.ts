@@ -17,8 +17,8 @@ export type SchoolYear = Skola24SchoolYear & {
 
 const initialState: SchoolYear = {
     data: {
-        schoolYearStart: new Date(),
-        schoolYearEnd: new Date(),
+        schoolYearStart: new Date().toISOString(),
+        schoolYearEnd: new Date().toISOString(),
     },
     weeks: {},
 };
